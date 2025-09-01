@@ -1,7 +1,10 @@
-import React, { FormEvent, useState, CSSProperties } from 'react';
-import { Button } from '../components/Button'; 
-import { Input } from '../components/Input';  
+import React, { FormEvent, useState, CSSProperties, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext'; 
+import { Button } from '@/components/Button'; 
+import { Input } from '@/components/Input'; 
 
+// Adicionando um estilo para a mensagem de erro
 const styles: { [key: string]: CSSProperties } = {
   container: {
     display: 'flex',
@@ -38,15 +41,34 @@ const styles: { [key: string]: CSSProperties } = {
     fontWeight: 500,
     color: '#555',
   },
+  error: {
+    color: '#d32f2f', 
+    textAlign: 'center',
+    fontSize: '0.9rem',
+    margin: 0,
+  },
 };
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (event: FormEvent) => {
+  const { login, isAuthenticated, isLoading, error } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    console.log('Tentativa de login com:', { email, password });
+    try {
+      await login({ email, password });
+    } catch (err) {
+      console.error('Falha na tentativa de login:', err);
+    }
   };
 
   return (
@@ -65,6 +87,7 @@ export function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -79,10 +102,15 @@ export function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            disabled={isLoading}
           />
         </div>
 
-        <Button type="submit">Entrar</Button>
+        {error && <p style={styles.error}>{error}</p>}
+
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? 'Entrando...' : 'Entrar'}
+        </Button>
       </form>
     </div>
   );

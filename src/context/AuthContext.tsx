@@ -1,17 +1,16 @@
-import {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
-  ReactNode,
-} from 'react';
+import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import { User } from '@/types';
+import { authService } from '@/services/auth.service'; 
+
+type LoginCredentials = Parameters<typeof authService.login>[0];
 
 interface AuthContextType {
   user: User | null;
   accessToken: string | null;
   isAuthenticated: boolean;
-  login: (userData: User, token: string) => void;
+  isLoading: boolean;
+  error: string | null; 
+  login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => void;
 }
 
@@ -24,27 +23,42 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true); 
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     try {
       const storedToken = localStorage.getItem('accessToken');
       const storedUser = localStorage.getItem('user');
-
       if (storedToken && storedUser) {
         setAccessToken(storedToken);
         setUser(JSON.parse(storedUser));
       }
-    } catch (error) {
-      console.error('Falha ao carregar dados de autenticação do localStorage', error);
+    } catch (err) {
+      console.error('Falha ao carregar dados de autenticação', err);
       localStorage.clear();
+    } finally {
+      setIsLoading(false); 
     }
   }, []);
 
-  const login = (userData: User, token: string) => {
-    setUser(userData);
-    setAccessToken(token);
-    localStorage.setItem('accessToken', token);
-    localStorage.setItem('user', JSON.stringify(userData));
+  const login = async (credentials: LoginCredentials) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const { user, token } = await authService.login(credentials);
+      setUser(user);
+      setAccessToken(token);
+      localStorage.setItem('accessToken', token);
+      localStorage.setItem('user', JSON.stringify(user));
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || 'Falha no login. Tente novamente.';
+      setError(errorMessage);
+      console.error(err);
+      throw new Error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const logout = () => {
@@ -57,8 +71,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const isAuthenticated = !!accessToken;
 
   return (
-    <AuthContext.Provider value={{ user, accessToken, isAuthenticated, login, logout }}>
-      {children}
+    <AuthContext.Provider
+      value={{ user, accessToken, isAuthenticated, isLoading, error, login, logout }}
+    >
+      {!isLoading && children}
     </AuthContext.Provider>
   );
 };
