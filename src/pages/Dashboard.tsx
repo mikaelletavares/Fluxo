@@ -1,9 +1,16 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useProjects } from '../hooks/useProjects';
+import { useAuth } from '@/context/AuthContext';
 import styles from './styles/dashboard.module.css';
 
 export function DashboardPage() {
   const { projects, isLoading, isError, error } = useProjects();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    navigate('/perfil');
+  };
 
   if (isLoading) {
     return (
@@ -28,7 +35,18 @@ export function DashboardPage() {
     <div className={styles.container}>
       <header className={styles.header}>
         <h1>Meus Projetos</h1>
-        <button className={styles.createButton}>Criar Novo Projeto</button>
+        <div className={styles.headerActions}>
+          <button className={styles.createButton}>Criar Novo Projeto</button>
+          <button 
+            onClick={handleProfileClick} 
+            className={styles.userButton}
+            title="Meu Perfil"
+          >
+            <div className={styles.userAvatar}>
+              {user?.name?.charAt(0).toUpperCase() || 'U'}
+            </div>
+          </button>
+        </div>
       </header>
 
       {projects && projects.length > 0 ? (

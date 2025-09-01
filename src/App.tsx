@@ -1,13 +1,14 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; 
-import { Toaster } from 'react-hot-toast'; // Adicionado
+import { Toaster } from 'react-hot-toast'; 
 import { AuthProvider } from './context/AuthContext';
 import { RequireAuth } from './components/auth/RequireAuth';
 
 import { LoginPage } from './pages/Login';
 import { RegisterPage } from './pages/Register';
 import { DashboardPage } from './pages/Dashboard';
-import { ProjectPage } from './pages/Project'; // Nome do arquivo corrigido
+import { ProjectPage } from './pages/Project'; 
+import { ProfilePage } from './pages/Profile';
 
 const queryClient = new QueryClient();
 
@@ -21,7 +22,6 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/cadastro" element={<RegisterPage />} />
 
-            {/* Rotas Protegidas */}
             <Route
               path="/dashboard"
               element={
@@ -39,13 +39,14 @@ function App() {
               }
             />
             <Route
-              path="/"
+              path="/perfil"
               element={
                 <RequireAuth>
-                  <DashboardPage />
+                  <ProfilePage />
                 </RequireAuth>
               }
             />
+            <Route path="/" element={<LoginPage />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

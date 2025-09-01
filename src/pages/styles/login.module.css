@@ -1,30 +1,140 @@
+:global(body),
+:global(html) {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  outline: none !important;
+  overflow-x: hidden;
+}
+
+.container * {
+  box-sizing: border-box;
+}
+
 .container {
   display: flex;
-  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.leftPanel {
+  flex: 1;
+  background: #162456;
+  display: flex;
   align-items: center;
-  min-height: 100vh;
-  background-color: #f0f2f5;
-  padding: 1rem;
-  font-family: sans-serif;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+}
+
+.leftPanel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  opacity: 0.3;
+}
+
+.brandContent {
+  text-align: center;
+  color: white;
+  z-index: 1;
+  position: relative;
+}
+
+.logo {
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logoImage {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+.brandTitle {
+  font-size: 4rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  background: linear-gradient(45deg, #ffffff, #e0e7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.brandSubtitle {
+  font-size: 1.25rem;
+  margin: 0;
+  opacity: 0.9;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.rightPanel {
+  flex: 1;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  margin: 0;
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+}
+
+.formContainer {
+  width: 100%;
+  max-width: 400px;
 }
 
 .form {
-  width: 100%;
-  max-width: 400px;
-  padding: 2.5rem;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.title {
+.formHeader {
   text-align: center;
-  font-size: 1.75rem;
-  color: #333;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  color: #1f2937;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: #6b7280;
+  margin: 0;
+  font-size: 1rem;
 }
 
 .inputGroup {
@@ -35,12 +145,73 @@
 
 .label {
   font-weight: 500;
-  color: #555;
+  color: #374151;
+  font-size: 0.9rem;
 }
 
 .error {
-  color: #d32f2f;
+  color: #dc2626;
   text-align: center;
   font-size: 0.9rem;
   margin: 0;
+  padding: 0.75rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.footerText {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.link {
+  color: #162456;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.link:hover {
+  color: #162456;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  
+  .leftPanel {
+    flex: 0 0 200px;
+    min-height: 200px;
+  }
+  
+  .logoImage {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .brandTitle {
+    font-size: 2.5rem;
+  }
+  
+  .brandSubtitle {
+    font-size: 1rem;
+  }
+  
+  .rightPanel {
+    flex: 1;
+    padding: 1rem;
+  }
+  
+  .formContainer {
+    max-width: 100%;
+  }
 }

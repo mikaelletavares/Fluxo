@@ -1,4 +1,4 @@
-import React, { FormEvent, useState, useEffect } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/Button';
@@ -30,45 +30,77 @@ export function LoginPage() {
 
   return (
     <div className={styles.container}>
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <h1 className={styles.title}>Entrar no Fluxo</h1>
-
-        <div className={styles.inputGroup}>
-          <label htmlFor="email" className={styles.label}>
-            Email
-          </label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="seu@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            disabled={isLoading}
-          />
+      {/* Container azul escuro - lateral esquerda */}
+      <div className={styles.leftPanel}>
+        <div className={styles.brandContent}>
+          <div className={styles.logo}>
+            <img 
+              src="/fluxo.png" 
+              alt="Fluxo Logo" 
+              className={styles.logoImage}
+            />
+            <h1 className={styles.brandTitle}>Fluxo</h1>
+            <p className={styles.brandSubtitle}>Gerencie seus projetos com eficiência</p>
+          </div>
         </div>
+      </div>
 
-        <div className={styles.inputGroup}>
-          <label htmlFor="password" className={styles.label}>
-            Senha
-          </label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            disabled={isLoading}
-          />
+      {/* Container do formulário - lateral direita */}
+      <div className={styles.rightPanel}>
+        <div className={styles.formContainer}>
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <div className={styles.formHeader}>
+              <h1 className={styles.title}>Bem-vindo de volta</h1>
+              <p className={styles.subtitle}>Entre na sua conta para continuar</p>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label htmlFor="email" className={styles.label}>
+                Email
+              </label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="seu@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label htmlFor="password" className={styles.label}>
+                Senha
+              </label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
+
+            {error && <p className={styles.error}>{error}</p>}
+
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? <Spinner /> : 'Entrar'}
+            </Button>
+
+            <div className={styles.footer}>
+              <p className={styles.footerText}>
+                Não tem uma conta?{' '}
+                <a href="/cadastro" className={styles.link}>
+                  Cadastre-se aqui
+                </a>
+              </p>
+            </div>
+          </form>
         </div>
-
-        {error && <p className={styles.error}>{error}</p>}
-
-        <Button type="submit" disabled={isLoading}>
-          {isLoading ? <Spinner /> : 'Entrar'}
-        </Button>
-      </form>
+      </div>
     </div>
   );
 }
