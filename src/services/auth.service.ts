@@ -19,12 +19,15 @@ export interface RegisterData {
   name: string;
   email: string;
   password: string;
+  birthDate?: string;
 }
 
 export interface UserProfile {
   id: string;
   name: string;
   email: string;
+  birthDate?: string;
+  photoURL?: string;
 }
 
 class AuthService {
@@ -63,7 +66,7 @@ class AuthService {
   }
 
   // Registro
-  async register({ name, email, password }: RegisterData): Promise<UserProfile> {
+  async register({ name, email, password, birthDate }: RegisterData): Promise<UserProfile> {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -77,7 +80,9 @@ class AuthService {
       const userProfile: UserProfile = {
         id: user.uid,
         name,
-        email: user.email!
+        email: user.email!,
+        birthDate,
+        photoURL: undefined
       };
 
       await this.createUserProfile(userProfile);
@@ -107,7 +112,9 @@ class AuthService {
         return {
           id: userId,
           name: userData.name,
-          email: userData.email
+          email: userData.email,
+          birthDate: userData.birthDate,
+          photoURL: userData.photoURL
         };
       } else {
         throw new Error('Perfil do usuário não encontrado');
@@ -123,6 +130,8 @@ class AuthService {
       await setDoc(doc(db, 'users', userProfile.id), {
         name: userProfile.name,
         email: userProfile.email,
+        birthDate: userProfile.birthDate,
+        photoURL: userProfile.photoURL,
         createdAt: new Date(),
         updatedAt: new Date()
       });

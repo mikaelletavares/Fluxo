@@ -5,6 +5,8 @@ export interface UserProfile {
   id: string;
   name: string;
   email: string;
+  birthDate?: string;
+  photoURL?: string;
 } 
 
 type LoginCredentials = Parameters<typeof authService.login>[0];

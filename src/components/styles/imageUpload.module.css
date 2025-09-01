@@ -1,0 +1,129 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.imageContainer {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.imageContainer:hover {
+  border-color: #162456;
+}
+
+.profileImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.imageContainer:hover .overlay {
+  opacity: 1;
+}
+
+.uploadButton,
+.deleteButton {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #162456;
+}
+
+.uploadButton:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+.deleteButton {
+  color: #dc3545;
+}
+
+.deleteButton:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+.uploadButton:disabled,
+.deleteButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.helpText {
+  font-size: 0.875rem;
+  color: #666;
+  text-align: center;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .imageContainer {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .uploadButton,
+  .deleteButton {
+    width: 32px;
+    height: 32px;
+  }
+}
