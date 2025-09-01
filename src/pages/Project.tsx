@@ -2,8 +2,9 @@ import React, { useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { BoardProvider, BoardContext, BoardActionType } from '@/context/BoardContext';
 import { boardService } from '@/services/board.service';
-import { Column } from '@/components/Column'; 
-import styles from './styles/project.module.css'; 
+import { Column } from '@/components/Column';
+import styles from './styles/project.module.css';
+import { DndContext, DragEndEvent } from '@dnd-kit/core';
 
 function ProjectContent() {
   const { id } = useParams<{ id: string }>();
@@ -43,6 +44,32 @@ function ProjectContent() {
     fetchInitialData();
   }, [id, dispatch]);
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over) {
+      return;
+    }
+
+    const taskId = String(active.id);
+    const fromColumnId = String(active.data.current?.columnId);
+    
+    const toColumnId = String(over.id);
+    
+    const tasksInToColumn = state.tasks.filter(task => task.columnId === toColumnId);
+    const newPosition = tasksInToColumn.length + 1;
+
+    dispatch({
+      type: BoardActionType.MOVE_TASK,
+      payload: {
+        taskId,
+        fromColumnId,
+        toColumnId,
+        newPosition,
+      },
+    });
+  };
+
   if (state.isLoading) {
     return <div className={styles.statusMessage}>Carregando quadro...</div>;
   }
@@ -52,18 +79,27 @@ function ProjectContent() {
   }
 
   return (
-    <div className={styles.boardContainer}>
-      <h1 className={styles.boardTitle}>{state.board?.name}</h1>
-      <div className={styles.columnsContainer}>
-        {state.columns.map((column) => {
-          const tasksInColumn = state.tasks
-            .filter((task) => task.columnId === column.id)
-            .sort((a, b) => a.position - b.position);
-
-          return <Column key={column.id} column={column} tasks={tasksInColumn} />;
-        })}
+    <DndContext onDragEnd={handleDragEnd}>
+      <div className={styles.boardContainer}>
+        <h1 className={styles.boardTitle}>{state.board?.name}</h1>
+        <div className={styles.columnsContainer}>
+          {state.columns.map((column) => {
+            const tasksInColumn = state.tasks
+              .filter((task) => task.columnId === column.id)
+              .sort((a, b) => a.position - b.position);
+            
+            return (
+              <Column 
+                key={column.id} 
+                column={column} 
+                tasks={tasksInColumn} 
+                droppableId={column.id} 
+              />
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </DndContext>
   );
 }
 

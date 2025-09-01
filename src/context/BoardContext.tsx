@@ -52,11 +52,13 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
         isError: false,
         error: null,
       };
+
     case BoardActionType.SET_LOADING:
       return {
         ...state,
         isLoading: action.payload,
       };
+
     case BoardActionType.SET_ERROR:
       return {
         ...state,
@@ -64,6 +66,34 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
         error: action.payload,
         isLoading: false,
       };
+
+    case BoardActionType.MOVE_TASK:
+      const { taskId, fromColumnId, toColumnId, newPosition } = action.payload;
+
+      const taskToMove = state.tasks.find(task => task.id === taskId);
+      if (!taskToMove) return state;
+
+      const updatedTasks = state.tasks.map(task => {
+        if (task.id === taskId) {
+          return { ...task, columnId: toColumnId, position: newPosition };
+        }
+
+        if (task.columnId === fromColumnId && task.position > taskToMove.position) {
+          return { ...task, position: task.position - 1 };
+        }
+
+        if (task.columnId === toColumnId && task.id !== taskId && task.position >= newPosition) {
+          return { ...task, position: task.position + 1 };
+        }
+
+        return task;
+      });
+
+      return {
+        ...state,
+        tasks: updatedTasks,
+      };
+
     default:
       return state;
   }
