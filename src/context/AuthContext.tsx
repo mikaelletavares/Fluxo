@@ -1,17 +1,23 @@
 import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import { User } from '@/types';
-import { authService } from '@/services/auth.service'; 
+import { authService } from '@/services/auth.service';
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+} 
 
 type LoginCredentials = Parameters<typeof authService.login>[0];
+type RegisterData = Parameters<typeof authService.register>[0];
 
 interface AuthContextType {
-  user: User | null;
-  accessToken: string | null;
+  user: UserProfile | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null; 
   login: (credentials: LoginCredentials) => Promise<void>;
-  logout: () => void;
+  register: (data: RegisterData) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,38 +27,28 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true); 
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    try {
-      const storedToken = localStorage.getItem('accessToken');
-      const storedUser = localStorage.getItem('user');
-      if (storedToken && storedUser) {
-        setAccessToken(storedToken);
-        setUser(JSON.parse(storedUser));
-      }
-    } catch (err) {
-      console.error('Falha ao carregar dados de autenticação', err);
-      localStorage.clear();
-    } finally {
-      setIsLoading(false); 
-    }
+    // Listener para mudanças de autenticação do Firebase
+    const unsubscribe = authService.onAuthStateChanged((user) => {
+      setUser(user);
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const login = async (credentials: LoginCredentials) => {
     setIsLoading(true);
     setError(null);
     try {
-      const { user, token } = await authService.login(credentials);
-      setUser(user);
-      setAccessToken(token);
-      localStorage.setItem('accessToken', token);
-      localStorage.setItem('user', JSON.stringify(user));
+      const userProfile = await authService.login(credentials);
+      setUser(userProfile);
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Falha no login. Tente novamente.';
+      const errorMessage = err.message || 'Falha no login. Tente novamente.';
       setError(errorMessage);
       console.error(err);
       throw new Error(errorMessage);
@@ -61,18 +57,37 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    setAccessToken(null);
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('user');
+  const register = async (data: RegisterData) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const userProfile = await authService.register(data);
+      setUser(userProfile);
+    } catch (err: any) {
+      const errorMessage = err.message || 'Falha no cadastro. Tente novamente.';
+      setError(errorMessage);
+      console.error(err);
+      throw new Error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const isAuthenticated = !!accessToken;
+  const logout = async () => {
+    try {
+      await authService.logout();
+      setUser(null);
+    } catch (err: any) {
+      console.error('Erro ao fazer logout:', err);
+      setError('Erro ao fazer logout');
+    }
+  };
+
+  const isAuthenticated = !!user;
 
   return (
     <AuthContext.Provider
-      value={{ user, accessToken, isAuthenticated, isLoading, error, login, logout }}
+      value={{ user, isAuthenticated, isLoading, error, login, register, logout }}
     >
       {!isLoading && children}
     </AuthContext.Provider>

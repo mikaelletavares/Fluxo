@@ -1,0 +1,102 @@
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background: linear-gradient(180deg, #162456 0%, #1e2a5e 100%);
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebarContent {
+  padding: 2rem 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav {
+  flex: 1;
+  padding: 0 1rem;
+}
+
+.menuList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menuItem {
+  margin: 0;
+}
+
+.menuButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: none;
+  border: none;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-align: left;
+}
+
+.menuButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateX(4px);
+}
+
+.menuButton.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.menuButton.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 24px;
+  background: #60a5fa;
+  border-radius: 0 2px 2px 0;
+}
+
+.menuIcon {
+  font-size: 1.25rem;
+  width: 24px;
+  text-align: center;
+}
+
+.menuLabel {
+  flex: 1;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+  
+  .menuButton {
+    padding: 0.875rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .menuIcon {
+    font-size: 1.1rem;
+  }
+}

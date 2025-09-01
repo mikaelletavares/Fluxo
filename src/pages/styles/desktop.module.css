@@ -21,6 +21,7 @@
 .headerLeft {
   display: flex;
   align-items: center;
+  gap: 1rem;
 }
 
 .logoContainer {
@@ -40,6 +41,48 @@
   font-size: 2rem;
   font-weight: 700;
   margin: 0;
+}
+
+.workspaceInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6b7280;
+  font-size: 1.2rem;
+}
+
+.separator {
+  color: #d1d5db;
+}
+
+.workspaceName {
+  color: #162456;
+  font-weight: 600;
+}
+
+.backButton {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+  background-color: transparent;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.backButton:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+  color: #374151;
+}
+
+.header h1 {
+  font-size: 1.75rem;
+  color: #1f2937;
+  margin: 0;
+  font-weight: 600;
 }
 
 .headerActions {
@@ -89,199 +132,137 @@
   font-weight: bold;
 }
 
-.projectList {
-  list-style: none;
-  padding: 0;
-  display: grid;
-  gap: 1rem;
-}
-
-.projectItem {
+.content {
   background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease-in-out;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 2rem;
+  min-height: 500px;
 }
 
-.projectItem:hover {
-  transform: translateY(-3px);
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.projectCard {
+  background-color: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.2s ease-in-out;
+  overflow: hidden;
+}
+
+.projectCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-color: #162456;
 }
 
 .projectLink {
   display: block;
   padding: 1.5rem;
   text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  font-size: 1.1rem;
-}
-
-.content {
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  padding: 2rem;
-}
-
-.welcomeSection {
+  color: inherit;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  margin-bottom: 3rem;
-  padding: 2rem 0;
 }
 
-.welcomeSection h2 {
-  font-size: 2rem;
-  color: #1f2937;
-  margin: 0 0 0.5rem 0;
-  font-weight: 600;
-}
-
-.welcomeSection p {
-  color: #6b7280;
-  font-size: 1.1rem;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.workspaceGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-.workspaceCard {
-  background-color: #f8fafc;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 2rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  position: relative;
-  overflow: hidden;
-}
-
-.workspaceCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-}
-
-.workspaceCard:hover::before {
-  opacity: 0.2;
-}
-
-.workspaceCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-  pointer-events: none;
-  border-radius: 12px;
-}
-
-.workspaceIcon {
+.projectIcon {
   font-size: 3rem;
   margin-bottom: 1rem;
-  opacity: 0.9;
-  position: relative;
-  z-index: 1;
+  opacity: 0.8;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
-  border-radius: 12px;
+  width: 48px;
+  height: 48px;
   margin: 0 auto 1rem auto;
+  color: #6b7280;
 }
 
-.workspaceCard h3 {
+
+
+.projectTitle {
   font-size: 1.25rem;
   color: #1f2937;
   margin: 0 0 0.5rem 0;
   font-weight: 600;
-  position: relative;
-  z-index: 1;
 }
 
-.workspaceCard p {
+.projectDescription {
   color: #6b7280;
-  margin: 0 0 1.5rem 0;
+  margin: 0;
   font-size: 0.9rem;
   line-height: 1.4;
-  position: relative;
-  z-index: 1;
 }
 
-.workspaceAction {
-  color: #162456;
-  font-weight: 500;
-  font-size: 0.9rem;
-  position: relative;
-  z-index: 1;
-}
-
-.emptyWorkspaces {
-  grid-column: 1 / -1;
+.emptyState {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 3rem 2rem;
+  padding: 4rem 2rem;
   color: #6b7280;
-  background-color: #f8fafc;
-  border: 2px dashed #d1d5db;
-  border-radius: 12px;
 }
 
-.emptyWorkspaces .emptyIcon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
   opacity: 0.6;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 80px;
   height: 80px;
-  margin: 0 auto 1rem auto;
+  margin: 0 auto 1.5rem auto;
+  color: #6b7280;
 }
 
-.emptyWorkspaces h3 {
-  font-size: 1.25rem;
+.emptyState h2 {
+  font-size: 1.5rem;
   color: #374151;
   margin: 0 0 0.5rem 0;
   font-weight: 600;
 }
 
-.emptyWorkspaces p {
+.emptyState p {
   margin: 0;
   font-size: 1rem;
   line-height: 1.5;
 }
 
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
 .error {
-  color: #d32f2f;
-  background-color: #ffebee;
-  padding: 1rem;
-  border-radius: 6px;
-  border: 1px solid #d32f2f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  color: #dc2626;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
 }
 
 /* Responsividade */
-@media (max-width: 1024px) {
-  .workspaceGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media (max-width: 768px) {
   .container {
     padding: 1rem;
@@ -293,11 +274,15 @@
     align-items: stretch;
   }
   
+  .headerLeft {
+    justify-content: center;
+  }
+  
   .headerActions {
     justify-content: center;
   }
   
-  .workspaceGrid {
+  .projectsGrid {
     grid-template-columns: 1fr;
   }
   
@@ -305,4 +290,3 @@
     padding: 1rem;
   }
 }
-

@@ -7,6 +7,7 @@ import { RequireAuth } from './components/auth/RequireAuth';
 import { LoginPage } from './pages/Login';
 import { RegisterPage } from './pages/Register';
 import { DashboardPage } from './pages/Dashboard';
+import { DesktopPage } from './pages/Desktop';
 import { ProjectPage } from './pages/Project'; 
 import { ProfilePage } from './pages/Profile';
 
@@ -27,6 +28,22 @@ function App() {
               element={
                 <RequireAuth>
                   <DashboardPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/desktop"
+              element={
+                <RequireAuth>
+                  <DesktopPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/desktop/:workspaceId"
+              element={
+                <RequireAuth>
+                  <DesktopPage />
                 </RequireAuth>
               }
             />

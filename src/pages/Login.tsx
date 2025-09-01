@@ -50,7 +50,7 @@ export function LoginPage() {
         <div className={styles.formContainer}>
           <form className={styles.form} onSubmit={handleSubmit}>
             <div className={styles.formHeader}>
-              <h1 className={styles.title}>Bem-vindo de volta</h1>
+              <h1 className={styles.title}>Bem-vindo(a) de volta</h1>
               <p className={styles.subtitle}>Entre na sua conta para continuar</p>
             </div>
 
