@@ -1,0 +1,45 @@
+# Nome do workflow 
+name: CI de Build e Testes
+
+# Eventos que irão disparar este workflow
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# Ações que serão executadas
+jobs:
+  build-and-test:
+    # Nome do job
+    name: Build e Testes
+    # Ambiente onde o job será executado 
+    runs-on: ubuntu-latest
+
+    # Passos do job
+    steps:
+      - name: Checkout do Código
+        # Ação padrão para clonar o repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        # Ação para configurar o ambiente Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # Use a versão do Node que seu projeto usa
+
+      - name: Instalar Dependências
+        # Comando para instalar as dependências do projeto
+        run: npm install
+
+      - name: Rodar Testes de Unidade
+        # Executa o comando de teste que você configurou no package.json
+        run: npm test
+
+      - name: Rodar Build da Aplicação
+        # Garante que a aplicação pode ser compilada sem erros
+        run: npm run build
