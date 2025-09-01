@@ -4,6 +4,8 @@
   border-radius: 12px;
   padding: 1.5rem;
   min-height: 400px;
+  width: 300px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   transition: all 0.2s ease-in-out;
@@ -53,12 +55,24 @@
   padding: 1rem;
   margin-bottom: 0.75rem;
   transition: all 0.2s ease;
-  cursor: pointer;
+  cursor: grab;
+  user-select: none;
 }
 
 .taskItem:hover {
   border-color: #d1d5db;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.taskItem:active {
+  cursor: grabbing;
+  transform: rotate(2deg);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.card[dragover] {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
 }
 
 .taskItem:last-child {
@@ -124,6 +138,7 @@
   .card {
     padding: 1rem;
     min-height: 350px;
+    width: 280px;
   }
   
   .cardTitle {

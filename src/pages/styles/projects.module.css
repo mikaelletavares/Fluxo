@@ -128,12 +128,32 @@
 }
 
 .cardsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: flex;
   gap: 1.5rem;
   width: 100%;
-  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 1rem 0;
   box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+.cardsGrid::-webkit-scrollbar {
+  height: 8px;
+}
+
+.cardsGrid::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.cardsGrid::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.cardsGrid::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }
 
 .emptyState {
@@ -197,7 +217,7 @@
 /* Responsividade */
 @media (max-width: 1024px) {
   .cardsGrid {
-    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
 }
 

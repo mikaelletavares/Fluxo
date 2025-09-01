@@ -180,6 +180,35 @@ export function ProjectsPage() {
     });
   };
 
+  const handleTaskMoved = async (taskId: string, newColumnId: string, newPosition: number) => {
+    try {
+      console.log('Movendo tarefa:', { taskId, newColumnId, newPosition });
+      
+      // Atualizar a tarefa no Firebase
+      await taskService.updateTask(taskId, {
+        columnId: newColumnId,
+        position: newPosition
+      });
+      
+      // Atualizar o estado local
+      setTasks(prev => {
+        const updatedTasks = prev.map(task => {
+          if (task.id === taskId) {
+            return { ...task, columnId: newColumnId, position: newPosition };
+          }
+          return task;
+        });
+        console.log('Tarefas atualizadas após movimento:', updatedTasks);
+        return updatedTasks;
+      });
+      
+      console.log('Tarefa movida com sucesso');
+    } catch (error) {
+      console.error('Erro ao mover tarefa:', error);
+      alert('Erro ao mover tarefa. Tente novamente.');
+    }
+  };
+
   if (isLoading) {
     return (
       <Layout>
@@ -254,6 +283,7 @@ export function ProjectsPage() {
                   tasks={tasks.filter(task => task.columnId === column.id)}
                   workspaceColor={workspace?.color}
                   onTaskCreated={handleTaskCreated}
+                  onTaskMoved={handleTaskMoved}
                 />
               ))}
             </div>

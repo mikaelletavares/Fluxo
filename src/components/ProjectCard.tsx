@@ -9,9 +9,10 @@ interface ProjectCardProps {
   tasks: Task[];
   workspaceColor?: string;
   onTaskCreated?: (task: Task) => void;
+  onTaskMoved?: (taskId: string, newColumnId: string, newPosition: number) => void;
 }
 
-export function ProjectCard({ column, tasks, workspaceColor = '#162456', onTaskCreated }: ProjectCardProps) {
+export function ProjectCard({ column, tasks, workspaceColor = '#162456', onTaskCreated, onTaskMoved }: ProjectCardProps) {
   const [isCreateTaskDialogOpen, setIsCreateTaskDialogOpen] = useState(false);
 
   const handleCreateTask = () => {
@@ -48,8 +49,49 @@ export function ProjectCard({ column, tasks, workspaceColor = '#162456', onTaskC
     }
   };
 
+  const handleDragStart = (e: React.DragEvent, task: Task) => {
+    e.dataTransfer.setData('text/plain', JSON.stringify({
+      taskId: task.id,
+      sourceColumnId: column.id,
+      task: task
+    }));
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    
+    try {
+      const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+      const { taskId, sourceColumnId, task } = data;
+      
+      // Se a tarefa já está nesta coluna, não fazer nada
+      if (sourceColumnId === column.id) {
+        return;
+      }
+      
+      // Calcular nova posição (adicionar no final da lista)
+      const newPosition = tasks.length;
+      
+      if (onTaskMoved) {
+        onTaskMoved(taskId, column.id, newPosition);
+      }
+    } catch (error) {
+      console.error('Erro ao processar drop:', error);
+    }
+  };
+
   return (
-    <div className={styles.card}>
+    <div 
+      className={styles.card}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+    >
       <div className={styles.cardHeader}>
         <h3 className={styles.cardTitle}>{column.name}</h3>
         <span className={styles.taskCount}>{tasks.length}</span>
@@ -58,7 +100,12 @@ export function ProjectCard({ column, tasks, workspaceColor = '#162456', onTaskC
       <div className={styles.tasksList}>
         {tasks.length > 0 ? (
           tasks.map((task) => (
-            <div key={task.id} className={styles.taskItem}>
+            <div 
+              key={task.id} 
+              className={styles.taskItem}
+              draggable
+              onDragStart={(e) => handleDragStart(e, task)}
+            >
               <div className={styles.taskContent}>
                 <h4 className={styles.taskTitle}>{task.title}</h4>
                 {task.description && (
