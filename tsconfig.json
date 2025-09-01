@@ -1,7 +1,22 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/app",
+    "types": ["node"],
+
+    "strict": true,
+
+    "baseUrl": "src",
+
+    "paths": {
+      "@/*": ["*"]
+    }
+
+  },
+  "files": [
+    "src/main.ts"
+  ],
+  "include": [
+    "src/d.ts"
   ]
 }
