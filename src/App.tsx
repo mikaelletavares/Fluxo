@@ -1,24 +1,49 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { RequireAuth } from './components/auth/RequireAuth';
 
 import { LoginPage } from './pages/Login';
-import { CadastroPage } from './pages/Cadastro';
+import { RegisterPage } from './pages/Register'; 
 import { DashboardPage } from './pages/Dashboard';
-import { ProjetoPage } from './pages/Projeto';
+import { ProjectPage } from './pages/Project';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/cadastro" element={<CadastroPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        
-        <Route path="/projeto/:id" element={<ProjetoPage />} />
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/cadastro" element={<RegisterPage />} />
 
-        <Route path="/" element={<DashboardPage />} />
-      </Routes>
-    </BrowserRouter>
+          <Route
+            path="/dashboard"
+            element={
+              <RequireAuth>
+                <DashboardPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/projeto/:id"
+            element={
+              <RequireAuth>
+                <ProjectPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <DashboardPage />
+              </RequireAuth>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
 export default App;
+

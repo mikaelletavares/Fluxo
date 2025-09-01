@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 
-export function ProjetoPage() {
+export function ProjectPage() {
   const { id } = useParams<{ id: string }>();
 
   return (
