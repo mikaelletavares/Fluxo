@@ -1,0 +1,144 @@
+.card {
+  background-color: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.cardTitle {
+  font-size: 1.1rem;
+  color: #1f2937;
+  margin: 0;
+  font-weight: 600;
+}
+
+.taskCount {
+  background-color: #e5e7eb;
+  color: #6b7280;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.tasksList {
+  flex: 1;
+  margin-bottom: 1rem;
+  min-height: 200px;
+}
+
+.taskItem {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.taskItem:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.taskItem:last-child {
+  margin-bottom: 0;
+}
+
+.taskContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.taskTitle {
+  font-size: 0.95rem;
+  color: #1f2937;
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.taskDescription {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.emptyTasks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: #9ca3af;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.addTaskButton {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  color: #ffffff;
+  background-color: #162456;
+  border: 2px solid #162456;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.addTaskButton:hover {
+  background-color: #0f1a3a;
+  border-color: #0f1a3a;
+  transform: translateY(-1px);
+}
+
+.addTaskButton:active {
+  transform: translateY(0);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .card {
+    padding: 1rem;
+    min-height: 350px;
+  }
+  
+  .cardTitle {
+    font-size: 1rem;
+  }
+  
+  .taskItem {
+    padding: 0.75rem;
+  }
+  
+  .taskTitle {
+    font-size: 0.9rem;
+  }
+  
+  .taskDescription {
+    font-size: 0.8rem;
+  }
+}

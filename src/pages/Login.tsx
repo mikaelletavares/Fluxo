@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
-import { Spinner } from '@/components/Spinner'; 
+import { Spinner } from '@/components/Spinner';
+import { Logo } from '@/components/Logo';
 import styles from './styles/login.module.css';
 
 export function LoginPage() {
@@ -34,11 +35,7 @@ export function LoginPage() {
       <div className={styles.leftPanel}>
         <div className={styles.brandContent}>
           <div className={styles.logo}>
-            <img 
-              src="/fluxo.png" 
-              alt="Fluxo Logo" 
-              className={styles.logoImage}
-            />
+            <Logo showText={false} />
             <h1 className={styles.brandTitle}>Fluxo</h1>
             <p className={styles.brandSubtitle}>Gerencie seus projetos com eficiência</p>
           </div>

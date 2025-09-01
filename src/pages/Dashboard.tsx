@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { CreateWorkspaceDialog } from '@/components/CreateWorkspaceDialog';
 import { Layout } from '@/components/Layout';
+import { Logo } from '@/components/Logo';
 import { workspaceService } from '@/services/workspace.service';
 import { Workspace } from '@/types/firebase';
 import styles from './styles/dashboard.module.css';
@@ -105,14 +106,7 @@ export function DashboardPage() {
       <div className={styles.container}>
         <header className={styles.header}>
           <div className={styles.headerLeft}>
-            <div className={styles.logoContainer}>
-              <img
-                src="/fluxo.png"
-                alt="Fluxo Logo"
-                className={styles.logo}
-              />
-              <h1 className={styles.brandName}>Fluxo</h1>
-            </div>
+            <Logo className={styles.logoContainer} />
           </div>
           <div className={styles.headerActions}>
             <button className={styles.createButton} onClick={handleCreateWorkspace}>

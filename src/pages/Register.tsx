@@ -4,6 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { Spinner } from '@/components/Spinner';
+import { Logo } from '@/components/Logo';
 import styles from './styles/register.module.css';
 
 export function RegisterPage() {
@@ -65,11 +66,7 @@ export function RegisterPage() {
       <div className={styles.leftPanel}>
         <div className={styles.brandContent}>
           <div className={styles.logo}>
-            <img
-              src="/fluxo.png"
-              alt="Fluxo Logo"
-              className={styles.logoImage}
-            />
+            <Logo showText={false} />
             <h1 className={styles.brandTitle}>Fluxo</h1>
             <p className={styles.brandSubtitle}>Crie sua conta e comece a gerenciar seus projetos</p>
           </div>

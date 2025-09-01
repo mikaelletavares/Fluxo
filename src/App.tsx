@@ -8,7 +8,8 @@ import { LoginPage } from './pages/Login';
 import { RegisterPage } from './pages/Register';
 import { DashboardPage } from './pages/Dashboard';
 import { DesktopPage } from './pages/Desktop';
-import { ProjectPage } from './pages/Project'; 
+import { ProjectPage } from './pages/Project';
+import { ProjectsPage } from './pages/ProjectsPage'; 
 import { ProfilePage } from './pages/Profile';
 
 const queryClient = new QueryClient();
@@ -52,6 +53,14 @@ function App() {
               element={
                 <RequireAuth>
                   <ProjectPage /> 
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/projects/:projectId"
+              element={
+                <RequireAuth>
+                  <ProjectsPage />
                 </RequireAuth>
               }
             />

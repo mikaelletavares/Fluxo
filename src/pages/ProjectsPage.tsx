@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { CreateProjectDialog } from '@/components/CreateProjectDialog';
 import { Layout } from '@/components/Layout';
 import { Logo } from '@/components/Logo';
 import { projectService } from '@/services/project.service';
 import { workspaceService } from '@/services/workspace.service';
-import { Project, Workspace } from '@/types/firebase';
-import styles from './styles/desktop.module.css';
+import { columnService } from '@/services/column.service';
+import { taskService } from '@/services/task.service';
+import { Project, Workspace, Column, Task } from '@/types/firebase';
+import { ProjectCard } from '@/components/ProjectCard';
+import { CreateCardDialog } from '@/components/CreateCardDialog';
+import styles from './styles/projects.module.css';
 
 // Lista de ícones (mesma do IconSelector)
 const ICONS = [
@@ -65,13 +68,15 @@ const getIconSvg = (iconId?: string): string => {
   return icon?.svg || ICONS[0].svg; // Retorna o primeiro ícone como fallback
 };
 
-export function DesktopPage() {
+export function ProjectsPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { workspaceId } = useParams<{ workspaceId?: string }>();
-  const [isCreateProjectDialogOpen, setIsCreateProjectDialogOpen] = useState(false);
-  const [projects, setProjects] = useState<Project[]>([]);
+  const { projectId } = useParams<{ projectId: string }>();
+  const [isCreateCardDialogOpen, setIsCreateCardDialogOpen] = useState(false);
+  const [project, setProject] = useState<Project | null>(null);
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
+  const [columns, setColumns] = useState<Column[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -79,42 +84,66 @@ export function DesktopPage() {
     navigate('/perfil');
   };
 
-
-
-  const handleCreateProject = () => {
-    setIsCreateProjectDialogOpen(true);
+  const handleBackToDesktop = () => {
+    if (project?.workspaceId) {
+      navigate(`/desktop/${project.workspaceId}`);
+    } else {
+      navigate('/desktop');
+    }
   };
 
-  const handleCloseCreateProjectDialog = () => {
-    setIsCreateProjectDialogOpen(false);
+  const handleCreateCard = () => {
+    if (columns.length >= 10) {
+      alert('Você pode criar no máximo 10 cards.');
+      return;
+    }
+    setIsCreateCardDialogOpen(true);
   };
 
-  // Carregar dados da workspace e projetos
+  const handleCloseCreateCardDialog = () => {
+    setIsCreateCardDialogOpen(false);
+  };
+
+  // Carregar dados do projeto
   useEffect(() => {
     const loadData = async () => {
-      if (!user || !workspaceId) {
-        console.log('Usuário ou workspaceId não encontrado:', { user: !!user, workspaceId });
+      if (!user || !projectId) {
+        console.log('Usuário ou projectId não encontrado:', { user: !!user, projectId });
         setIsLoading(false);
         return;
       }
       
-      console.log('Iniciando carregamento de dados para workspace:', workspaceId);
+      console.log('Iniciando carregamento de dados para projeto:', projectId);
       
       try {
         setIsLoading(true);
         setError(null);
         
-        // Carregar workspace
-        console.log('Carregando workspace...');
-        const workspaceData = await workspaceService.getWorkspaceById(workspaceId);
-        console.log('Workspace carregado:', workspaceData);
-        setWorkspace(workspaceData);
+        // Carregar projeto
+        console.log('Carregando projeto...');
+        const projectData = await projectService.getProjectById(projectId);
+        console.log('Projeto carregado:', projectData);
+        setProject(projectData);
         
-        // Carregar projetos da workspace
-        console.log('Carregando projetos...');
-        const workspaceProjects = await projectService.getWorkspaceProjects(workspaceId);
-        console.log('Projetos carregados:', workspaceProjects);
-        setProjects(workspaceProjects);
+        if (projectData) {
+          // Carregar workspace do projeto
+          console.log('Carregando workspace...');
+          const workspaceData = await workspaceService.getWorkspaceById(projectData.workspaceId);
+          console.log('Workspace carregado:', workspaceData);
+          setWorkspace(workspaceData);
+        }
+        
+        // Carregar colunas do projeto
+        console.log('Carregando colunas...');
+        const projectColumns = await columnService.getProjectColumns(projectId);
+        console.log('Colunas carregadas:', projectColumns);
+        setColumns(projectColumns);
+        
+        // Carregar tarefas do projeto
+        console.log('Carregando tarefas...');
+        const projectTasks = await taskService.getProjectTasks(projectId);
+        console.log('Tarefas carregadas:', projectTasks);
+        setTasks(projectTasks);
       } catch (err: any) {
         console.error('Erro ao carregar dados:', err);
         setError(err.message || 'Erro ao carregar dados');
@@ -124,116 +153,134 @@ export function DesktopPage() {
     };
 
     loadData();
-  }, [user, workspaceId]);
+  }, [user, projectId]);
 
-  const handleCreateProjectSubmit = async (name: string, description: string, icon: string) => {
-    if (!user || !workspaceId) return;
+  const handleCreateCardSubmit = async (name: string) => {
+    if (!project) return;
     
     try {
-      const newProject = await projectService.createProject({
+      console.log('Criando card:', name);
+      const newColumn = await columnService.createColumn({
         name,
-        description,
-        icon,
-        workspaceId,
-        userId: user.id
+        position: columns.length,
+        projectId: project.id
       });
-      setProjects(prev => [...prev, newProject]);
-    } catch (err: any) {
-      setError(err.message || 'Erro ao criar projeto');
+      setColumns(prev => [...prev, newColumn]);
+    } catch (error) {
+      console.error('Erro ao criar card:', error);
     }
+  };
+
+  const handleTaskCreated = (newTask: Task) => {
+    console.log('Nova tarefa recebida no callback:', newTask);
+    setTasks(prev => {
+      const updatedTasks = [...prev, newTask];
+      console.log('Lista de tarefas atualizada:', updatedTasks);
+      return updatedTasks;
+    });
   };
 
   if (isLoading) {
     return (
-      <div className={styles.container}>
-        <div className={styles.loading}>
-          <p>Carregando projetos...</p>
+      <Layout>
+        <div className={styles.container}>
+          <div className={styles.loading}>
+            <p>Carregando projeto...</p>
+          </div>
         </div>
-      </div>
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <div className={styles.container}>
+          <div className={styles.error}>
+            <p>Erro: {error}</p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!project) {
+    return (
+      <Layout>
+        <div className={styles.container}>
+          <div className={styles.error}>
+            <p>Projeto não encontrado.</p>
+          </div>
+        </div>
+      </Layout>
     );
   }
 
   return (
     <Layout>
       <div className={styles.container}>
-        <header className={styles.header}>
+        <div className={styles.header}>
           <div className={styles.headerLeft}>
             <Logo className={styles.logoContainer} />
             <div className={styles.workspaceInfo}>
-              <span className={styles.separator}>/</span>
-              <span className={styles.workspaceName}>{workspace?.name || 'Área de Trabalho'}</span>
+              <span className={styles.workspaceName}>{workspace?.name}</span>
+              <span className={styles.separator}>•</span>
+              <span className={styles.projectName}>{project.name}</span>
             </div>
           </div>
           <div className={styles.headerActions}>
-            <button className={styles.createButton} onClick={handleCreateProject}>
-              Criar Novo Projeto
-            </button>
             <button
-              onClick={handleProfileClick}
-              className={styles.userButton}
-              title="Meu Perfil"
+              className={styles.createButton}
+              onClick={handleCreateCard}
+              disabled={columns.length >= 10}
             >
+              + Adicionar Card
+            </button>
+            <button className={styles.userButton} onClick={handleProfileClick}>
               <div className={styles.userAvatar}>
-                {user?.name?.charAt(0).toUpperCase() || 'U'}
+                {user?.email?.charAt(0).toUpperCase() || 'U'}
               </div>
             </button>
           </div>
-        </header>
-
-      <div className={styles.content}>
-        {error && (
-          <div className={styles.error}>
-            <p>{error}</p>
-            <button onClick={() => setError(null)}>Fechar</button>
-          </div>
-        )}
-
-        {projects.length > 0 ? (
-          <div className={styles.projectsGrid}>
-            {projects.map((project) => (
-              <div key={project.id} className={styles.projectCard}>
-                <Link to={`/projects/${project.id}`} className={styles.projectLink}>
-                  <div className={styles.projectIcon}>
-                    <svg 
-                      width="32" 
-                      height="32" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      style={{ color: workspace?.color || '#162456' }}
-                    >
-                      <path d={getIconSvg(project.icon)} fill="currentColor" />
-                    </svg>
-                  </div>
-                  <h3 className={styles.projectTitle}>{project.name}</h3>
-                  <p className={styles.projectDescription}>
-                    {project.description || 'Clique para abrir o projeto'}
-                  </p>
-                </Link>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className={styles.emptyState}>
-            <div className={styles.emptyIcon}>
-              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M16 13H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M16 17H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M10 9H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <h2>Nenhum projeto encontrado</h2>
-            <p>Você ainda não tem projetos nesta área de trabalho. Que tal criar o primeiro?</p>
-          </div>
-        )}
         </div>
 
-        <CreateProjectDialog
-          isOpen={isCreateProjectDialogOpen}
-          onClose={handleCloseCreateProjectDialog}
-          onCreateProject={handleCreateProjectSubmit}
-          workspaceName={workspace?.name}
+        <div className={styles.content}>
+          {columns.length > 0 ? (
+            <div className={styles.cardsGrid}>
+              {columns.map((column) => (
+                <ProjectCard
+                  key={column.id}
+                  column={column}
+                  tasks={tasks.filter(task => task.columnId === column.id)}
+                  workspaceColor={workspace?.color}
+                  onTaskCreated={handleTaskCreated}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className={styles.emptyState}>
+                             <div className={styles.emptyIcon}>
+                 <svg 
+                   width="80" 
+                   height="80" 
+                   viewBox="0 0 24 24" 
+                   fill="none" 
+                   style={{ color: '#9ca3af' }}
+                 >
+                   <path d={getIconSvg(project.icon)} fill="currentColor" />
+                 </svg>
+               </div>
+              <h2>Nenhum card criado ainda</h2>
+              <p>Comece criando seu primeiro card para organizar suas tarefas.</p>
+            </div>
+          )}
+        </div>
+
+        <CreateCardDialog
+          isOpen={isCreateCardDialogOpen}
+          onClose={handleCloseCreateCardDialog}
+          onCreateCard={handleCreateCardSubmit}
+          projectName={project.name}
           workspaceColor={workspace?.color}
         />
       </div>
