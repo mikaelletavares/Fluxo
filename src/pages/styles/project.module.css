@@ -1,0 +1,31 @@
+.boardContainer {
+  padding: 2rem;
+  background-color: #f0f2f5;
+  min-height: 100vh;
+}
+
+.boardTitle {
+  font-size: 2rem;
+  color: #172b4d;
+  margin-bottom: 2rem;
+}
+
+.columnsContainer {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.statusMessage {
+  text-align: center;
+  margin-top: 5rem;
+  font-size: 1.5rem;
+  color: #666;
+}
+
+.errorMessage {
+  text-align: center;
+  margin-top: 5rem;
+  font-size: 1.5rem;
+  color: #d32f2f;
+}

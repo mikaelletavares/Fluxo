@@ -5,7 +5,7 @@ export enum TaskStatus {
 }
 
 export interface User {
-  id: string;      
+  id: string;
   name: string;
   email: string;
 }
@@ -13,17 +13,29 @@ export interface User {
 export interface Project {
   id: string;
   name: string;
-  ownerId: string; 
+  ownerId: string;
+}
+
+export interface Board {
+  id: string;
+  name: string;
+}
+
+export interface Column {
+  id: string;
+  name: string;
+  boardId: string;
+  position: number; 
 }
 
 export interface Task {
   id: string;
   title: string;
   description: string;
-  status: TaskStatus; 
-  projectId: string; 
+  columnId: string;
+  position: number;
 }
 
-export type CreateTaskDTO = Omit<Task, 'id' | 'projectId'>;
+export type CreateTaskDTO = Omit<Task, 'id' | 'columnId'>;
 
-export type UpdateTaskDTO = Partial<Omit<Task, 'id' | 'projectId'>>;
+export type UpdateTaskDTO = Partial<Omit<Task, 'id' | 'columnId'>>;
