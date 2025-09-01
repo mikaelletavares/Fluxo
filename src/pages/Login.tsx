@@ -1,8 +1,9 @@
-import React, { FormEvent, useState, CSSProperties, useEffect } from 'react';
+import React, { FormEvent, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext'; 
-import { Button } from '@/components/Button'; 
-import { Input } from '@/components/Input'; 
+import { useAuth } from '@/context/AuthContext';
+import { Button } from '@/components/Button';
+import { Input } from '@/components/Input';
+import { Spinner } from '@/components/Spinner'; 
 import styles from './styles/login.module.css';
 
 export function LoginPage() {
@@ -65,10 +66,9 @@ export function LoginPage() {
         {error && <p className={styles.error}>{error}</p>}
 
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? 'Entrando...' : 'Entrar'}
+          {isLoading ? <Spinner /> : 'Entrar'}
         </Button>
       </form>
     </div>
   );
 }
-

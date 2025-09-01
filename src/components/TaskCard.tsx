@@ -1,17 +1,19 @@
 import React from 'react';
 import { Task } from '@/types';
 import styles from './styles/TaskCard.module.css';
-import { useDraggable } from '@dnd-kit/core'; 
-import { CSS } from '@dnd-kit/utilities'; 
+import { useDraggable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
 
 interface TaskCardProps {
   task: Task;
+  onEdit: () => void; 
+  onDelete: () => void; 
 }
 
-export function TaskCard({ task }: TaskCardProps) {
+export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: task.id, 
-    data: { 
+    id: task.id,
+    data: {
       columnId: task.columnId,
     }
   });
@@ -30,6 +32,10 @@ export function TaskCard({ task }: TaskCardProps) {
     >
       <h4 className={styles.title}>{task.title}</h4>
       <p className={styles.description}>{task.description}</p>
+      <div className={styles.actions}>
+        <button className={styles.editButton} onClick={onEdit}>Editar</button>
+        <button className={styles.deleteButton} onClick={onDelete}>Excluir</button>
+      </div>
     </div>
   );
 }

@@ -5,13 +5,18 @@ import { boardService } from '@/services/board.service';
 import { Column } from '@/components/Column';
 import styles from './styles/project.module.css';
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { taskService } from '@/services/task.service';
+import toast from 'react-hot-toast';
+import { Spinner } from '@/components/Spinner';
 
 function ProjectContent() {
   const { id } = useParams<{ id: string }>();
   const context = useContext(BoardContext);
+  const queryClient = useQueryClient();
 
   if (!context) {
-    throw new Error('ProjectBoardContent deve ser usado dentro de um BoardProvider');
+    throw new Error('ProjectContent deve ser usado dentro de um BoardProvider');
   }
 
   const { state, dispatch } = context;
@@ -38,40 +43,62 @@ function ProjectContent() {
           type: BoardActionType.SET_ERROR,
           payload: 'Falha ao carregar os dados do quadro.',
         });
+        toast.error('Falha ao carregar os dados do quadro.');
       }
     };
 
     fetchInitialData();
   }, [id, dispatch]);
 
+  const updateTaskMutation = useMutation({
+    mutationFn: (data: { taskId: string; updates: any }) => taskService.updateTask(data.taskId, data.updates),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['boards', id] });
+      toast.success('Tarefa atualizada com sucesso!');
+    },
+    onError: () => {
+      toast.error('Erro ao atualizar a tarefa.');
+    },
+  });
+
+  const deleteTaskMutation = useMutation({
+    mutationFn: (taskId: string) => taskService.deleteTask(taskId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['boards', id] });
+      toast.success('Tarefa excluída com sucesso!');
+    },
+    onError: () => {
+      toast.error('Erro ao excluir a tarefa.');
+    },
+  });
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
-    if (!over) {
-      return;
-    }
-
+    if (!over) return;
     const taskId = String(active.id);
     const fromColumnId = String(active.data.current?.columnId);
-    
     const toColumnId = String(over.id);
-    
-    const tasksInToColumn = state.tasks.filter(task => task.columnId === toColumnId);
-    const newPosition = tasksInToColumn.length + 1;
+    if (fromColumnId === toColumnId) return;
+    updateTaskMutation.mutate({ taskId, updates: { columnId: toColumnId } });
+  };
 
-    dispatch({
-      type: BoardActionType.MOVE_TASK,
-      payload: {
-        taskId,
-        fromColumnId,
-        toColumnId,
-        newPosition,
-      },
-    });
+  const handleEditTask = (taskId: string, newTitle: string) => {
+    updateTaskMutation.mutate({ taskId, updates: { title: newTitle } });
+  };
+
+  const handleDeleteTask = (taskId: string) => {
+    if (window.confirm('Tem certeza de que deseja excluir esta tarefa?')) {
+      deleteTaskMutation.mutate(taskId);
+    }
   };
 
   if (state.isLoading) {
-    return <div className={styles.statusMessage}>Carregando quadro...</div>;
+    return (
+      <div className={styles.statusMessage}>
+        <Spinner />
+        <p>Carregando quadro...</p>
+      </div>
+    );
   }
 
   if (state.isError) {
@@ -87,13 +114,15 @@ function ProjectContent() {
             const tasksInColumn = state.tasks
               .filter((task) => task.columnId === column.id)
               .sort((a, b) => a.position - b.position);
-            
+
             return (
-              <Column 
-                key={column.id} 
-                column={column} 
-                tasks={tasksInColumn} 
-                droppableId={column.id} 
+              <Column
+                key={column.id}
+                column={column}
+                tasks={tasksInColumn}
+                droppableId={column.id}
+                onEditTask={handleEditTask}
+                onDeleteTask={handleDeleteTask}
               />
             );
           })}

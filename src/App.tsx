@@ -1,12 +1,13 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; 
+import { Toaster } from 'react-hot-toast'; // Adicionado
 import { AuthProvider } from './context/AuthContext';
 import { RequireAuth } from './components/auth/RequireAuth';
 
 import { LoginPage } from './pages/Login';
 import { RegisterPage } from './pages/Register';
 import { DashboardPage } from './pages/Dashboard';
-import { ProjectPage } from './pages/Project';
+import { ProjectPage } from './pages/Project'; // Nome do arquivo corrigido
 
 const queryClient = new QueryClient();
 
@@ -15,8 +16,8 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <BrowserRouter>
+          <Toaster /> 
           <Routes>
-            {/* Rotas Públicas */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/cadastro" element={<RegisterPage />} />
 
@@ -33,7 +34,7 @@ function App() {
               path="/projeto/:id"
               element={
                 <RequireAuth>
-                  <ProjectPage />
+                  <ProjectPage /> 
                 </RequireAuth>
               }
             />
@@ -53,4 +54,3 @@ function App() {
 }
 
 export default App;
-
