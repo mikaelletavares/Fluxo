@@ -1,47 +1,54 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; 
 import { AuthProvider } from './context/AuthContext';
 import { RequireAuth } from './components/auth/RequireAuth';
 
 import { LoginPage } from './pages/Login';
-import { RegisterPage } from './pages/Register'; 
+import { RegisterPage } from './pages/Register';
 import { DashboardPage } from './pages/Dashboard';
 import { ProjectPage } from './pages/Project';
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/cadastro" element={<RegisterPage />} />
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Rotas Públicas */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/cadastro" element={<RegisterPage />} />
 
-          <Route
-            path="/dashboard"
-            element={
-              <RequireAuth>
-                <DashboardPage />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/projeto/:id"
-            element={
-              <RequireAuth>
-                <ProjectPage />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/"
-            element={
-              <RequireAuth>
-                <DashboardPage />
-              </RequireAuth>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+            {/* Rotas Protegidas */}
+            <Route
+              path="/dashboard"
+              element={
+                <RequireAuth>
+                  <DashboardPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/projeto/:id"
+              element={
+                <RequireAuth>
+                  <ProjectPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/"
+              element={
+                <RequireAuth>
+                  <DashboardPage />
+                </RequireAuth>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
 
