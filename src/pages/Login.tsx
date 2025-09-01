@@ -3,51 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext'; 
 import { Button } from '@/components/Button'; 
 import { Input } from '@/components/Input'; 
-
-// Adicionando um estilo para a mensagem de erro
-const styles: { [key: string]: CSSProperties } = {
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    backgroundColor: '#f0f2f5',
-    padding: '1rem',
-    fontFamily: 'sans-serif',
-  },
-  form: {
-    width: '100%',
-    maxWidth: '400px',
-    padding: '2.5rem',
-    backgroundColor: '#ffffff',
-    borderRadius: '8px',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1.5rem',
-  },
-  title: {
-    textAlign: 'center',
-    fontSize: '1.75rem',
-    color: '#333',
-    marginBottom: '0.5rem',
-  },
-  inputGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.5rem',
-  },
-  label: {
-    fontWeight: 500,
-    color: '#555',
-  },
-  error: {
-    color: '#d32f2f', 
-    textAlign: 'center',
-    fontSize: '0.9rem',
-    margin: 0,
-  },
-};
+import styles from './styles/login.module.css';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
@@ -72,12 +28,12 @@ export function LoginPage() {
   };
 
   return (
-    <div style={styles.container}>
-      <form style={styles.form} onSubmit={handleSubmit}>
-        <h1 style={styles.title}>Entrar no Fluxo</h1>
+    <div className={styles.container}>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <h1 className={styles.title}>Entrar no Fluxo</h1>
 
-        <div style={styles.inputGroup}>
-          <label htmlFor="email" style={styles.label}>
+        <div className={styles.inputGroup}>
+          <label htmlFor="email" className={styles.label}>
             Email
           </label>
           <Input
@@ -91,8 +47,8 @@ export function LoginPage() {
           />
         </div>
 
-        <div style={styles.inputGroup}>
-          <label htmlFor="password" style={styles.label}>
+        <div className={styles.inputGroup}>
+          <label htmlFor="password" className={styles.label}>
             Senha
           </label>
           <Input
@@ -106,7 +62,7 @@ export function LoginPage() {
           />
         </div>
 
-        {error && <p style={styles.error}>{error}</p>}
+        {error && <p className={styles.error}>{error}</p>}
 
         <Button type="submit" disabled={isLoading}>
           {isLoading ? 'Entrando...' : 'Entrar'}
