@@ -109,11 +109,46 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
 .sectionTitle {
   font-size: 1.5rem;
   color: #162456;
-  margin: 0 0 2rem 0;
+  margin: 0;
   font-weight: 700;
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  color: #162456;
+  border: 1px solid #e9ecef;
+  padding: 0.5rem;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editButton:hover:not(:disabled) {
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.editButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .infoGrid {
@@ -213,5 +248,17 @@
   
   .infoIcon {
     align-self: center;
+  }
+  
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .editButton {
+    align-self: flex-start;
+    width: 36px;
+    height: 36px;
   }
 }

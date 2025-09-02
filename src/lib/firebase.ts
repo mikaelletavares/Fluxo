@@ -20,6 +20,6 @@ const app = initializeApp(firebaseConfig);
 // Inicializar serviços
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const storage = getStorage(app);
+export const storage = getStorage(app, 'gs://fluxo-pro-site.firebasestorage.app');
 
 export default app;

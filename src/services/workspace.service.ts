@@ -59,6 +59,7 @@ class WorkspaceService {
         workspaces.push({
           id: doc.id,
           name: data.name,
+          description: data.description,
           color: data.color,
           userId: data.userId,
           createdAt: data.createdAt?.toDate() || new Date(),
@@ -97,12 +98,41 @@ class WorkspaceService {
     }
   }
 
-  // Deletar área de trabalho
+  // Deletar área de trabalho e todos os dados relacionados
   async deleteWorkspace(workspaceId: string): Promise<void> {
     try {
+      // Importar outros serviços para exclusão em cascata
+      const { projectService } = await import('./project.service');
+      const { columnService } = await import('./column.service');
+      const { taskService } = await import('./task.service');
+
+      // 1. Buscar todos os projetos do workspace
+      const projects = await projectService.getWorkspaceProjects(workspaceId);
+      
+      // 2. Para cada projeto, excluir colunas e tarefas
+      for (const project of projects) {
+        // Buscar colunas do projeto
+        const columns = await columnService.getProjectColumns(project.id);
+        
+        // Para cada coluna, excluir todas as tarefas
+        for (const column of columns) {
+          const tasks = await taskService.getColumnTasks(column.id);
+          for (const task of tasks) {
+            await taskService.deleteTask(task.id);
+          }
+          // Excluir a coluna
+          await columnService.deleteColumn(column.id);
+        }
+        
+        // Excluir o projeto
+        await projectService.deleteProject(project.id);
+      }
+      
+      // 3. Finalmente, excluir o workspace
       await deleteDoc(doc(db, this.collectionName, workspaceId));
     } catch (error) {
-      throw new Error('Erro ao deletar área de trabalho');
+      console.error('Erro ao deletar workspace:', error);
+      throw new Error('Erro ao deletar área de trabalho e dados relacionados');
     }
   }
 
@@ -117,6 +147,7 @@ class WorkspaceService {
         return {
           id: workspaceSnap.id,
           name: data.name,
+          description: data.description,
           color: data.color,
           userId: data.userId,
           createdAt: data.createdAt?.toDate() || new Date(),

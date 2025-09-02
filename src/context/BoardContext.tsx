@@ -1,5 +1,5 @@
 import { createContext, Dispatch, ReactNode, useReducer } from 'react';
-import { Board, Column, Task } from '@/types';
+import { Board, Column, Task } from '@/types/firebase';
 
 export interface BoardState {
   board: Board | null;
@@ -15,13 +15,15 @@ export enum BoardActionType {
   SET_LOADING = 'SET_LOADING',
   SET_ERROR = 'SET_ERROR',
   MOVE_TASK = 'MOVE_TASK',
+  UPDATE_TASK = 'UPDATE_TASK',
 }
 
 export type BoardAction =
   | { type: BoardActionType.SET_BOARD_DATA; payload: { board: Board; columns: Column[]; tasks: Task[] } }
   | { type: BoardActionType.SET_LOADING; payload: boolean }
   | { type: BoardActionType.SET_ERROR; payload: string | null }
-  | { type: BoardActionType.MOVE_TASK; payload: { taskId: string; fromColumnId: string; toColumnId: string; newPosition: number } };
+  | { type: BoardActionType.MOVE_TASK; payload: { taskId: string; fromColumnId: string; toColumnId: string; newPosition: number } }
+  | { type: BoardActionType.UPDATE_TASK; payload: Task };
 
 interface BoardContextProps {
   state: BoardState;
@@ -92,6 +94,17 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
       return {
         ...state,
         tasks: updatedTasks,
+      };
+
+    case BoardActionType.UPDATE_TASK:
+      const updatedTask = action.payload;
+      const updatedTasksList = state.tasks.map(task => 
+        task.id === updatedTask.id ? updatedTask : task
+      );
+      
+      return {
+        ...state,
+        tasks: updatedTasksList,
       };
 
     default:

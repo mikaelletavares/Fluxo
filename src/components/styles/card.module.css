@@ -1,0 +1,192 @@
+.card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f3f4f6;
+  background-color: #fafafa;
+  position: relative;
+}
+
+.cardTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardContent {
+  padding: 1.25rem;
+}
+
+/* Menu Container */
+.menuContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.menuButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.menuButton:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.menuButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+/* Dropdown Menu */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 50;
+  min-width: 160px;
+  overflow: hidden;
+  animation: dropdownFadeIn 0.15s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: none;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.dropdownItem:hover:not(:disabled) {
+  background-color: #f9fafb;
+  color: #1f2937;
+}
+
+.dropdownItem:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dropdownItem:first-child {
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.dropdownItem svg {
+  flex-shrink: 0;
+  color: #6b7280;
+}
+
+.dropdownItem:hover:not(:disabled) svg {
+  color: #374151;
+}
+
+/* Responsividade */
+@media (max-width: 640px) {
+  .cardHeader {
+    padding: 0.875rem 1rem;
+  }
+  
+  .cardTitle {
+    font-size: 1rem;
+  }
+  
+  .cardContent {
+    padding: 1rem;
+  }
+  
+  .menuButton {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .dropdown {
+    min-width: 140px;
+  }
+  
+  .dropdownItem {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* Estados especiais */
+.card.compact .cardHeader {
+  padding: 0.75rem 1rem;
+}
+
+.card.compact .cardTitle {
+  font-size: 1rem;
+}
+
+.card.compact .cardContent {
+  padding: 1rem;
+}
+
+/* Cores personalizadas */
+.card.workspace {
+  border-left: 4px solid var(--workspace-color, #162456);
+}
+
+.card.project {
+  border-left: 4px solid var(--project-color, #059669);
+}
+
+.card.task {
+  border-left: 4px solid var(--task-color, #dc2626);
+}

@@ -70,6 +70,22 @@ service cloud.firestore {
 }
 ```
 
+### **Regras ULTRA PERMISSIVAS para debug (TEMPORÁRIAS):**
+
+Se ainda não funcionar, use estas para identificar o problema:
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ULTRA PERMISSIVO - apenas para debug
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+```
+
 ### **Como aplicar:**
 
 1. Cole as regras no Firebase Console

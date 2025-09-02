@@ -24,7 +24,10 @@ export function CreateTaskDialog({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (taskTitle.trim()) {
-      onCreateTask(taskTitle.trim(), taskDescription.trim() || undefined);
+      onCreateTask(
+        taskTitle.trim(), 
+        taskDescription.trim() || undefined
+      );
       setTaskTitle('');
       setTaskDescription('');
       onClose();
@@ -81,6 +84,8 @@ export function CreateTaskDialog({
             />
           </div>
 
+
+
           <div className={styles.preview}>
             <label className={styles.label}>Preview</label>
             <div className={styles.previewTask}>
@@ -93,6 +98,7 @@ export function CreateTaskDialog({
                     {taskDescription}
                   </p>
                 )}
+
               </div>
             </div>
           </div>

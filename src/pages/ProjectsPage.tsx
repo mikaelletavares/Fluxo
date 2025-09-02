@@ -10,6 +10,8 @@ import { taskService } from '@/services/task.service';
 import { Project, Workspace, Column, Task } from '@/types/firebase';
 import { ProjectCard } from '@/components/ProjectCard';
 import { CreateCardDialog } from '@/components/CreateCardDialog';
+import { EditColumnDialog } from '@/components/EditColumnDialog';
+import { ConfirmDeleteDialog } from '@/components/ConfirmDeleteDialog';
 import styles from './styles/projects.module.css';
 
 // Lista de ícones (mesma do IconSelector)
@@ -73,6 +75,9 @@ export function ProjectsPage() {
   const navigate = useNavigate();
   const { projectId } = useParams<{ projectId: string }>();
   const [isCreateCardDialogOpen, setIsCreateCardDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [selectedColumn, setSelectedColumn] = useState<Column | null>(null);
   const [project, setProject] = useState<Project | null>(null);
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [columns, setColumns] = useState<Column[]>([]);
@@ -209,6 +214,76 @@ export function ProjectsPage() {
     }
   };
 
+  const handleTaskUpdated = (updatedTask: Task) => {
+    console.log('Atualizando tarefa na lista local:', updatedTask);
+    setTasks(prev => prev.map(task => 
+      task.id === updatedTask.id ? updatedTask : task
+    ));
+    console.log('Tarefa atualizada na lista local com sucesso');
+  };
+
+  const handleTaskDeleted = (taskId: string) => {
+    console.log('Removendo tarefa da lista local:', taskId);
+    setTasks(prev => prev.filter(task => task.id !== taskId));
+    console.log('Tarefa removida da lista local com sucesso');
+  };
+
+  const handleEditColumn = (column: Column) => {
+    setSelectedColumn(column);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleDeleteColumn = (column: Column) => {
+    setSelectedColumn(column);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleSaveColumn = async (data: { name: string }) => {
+    if (!selectedColumn) return;
+    
+    try {
+      await columnService.updateColumn(selectedColumn.id, { name: data.name });
+      
+      // Atualizar a coluna na lista local
+      setColumns(prev => prev.map(c => 
+        c.id === selectedColumn.id 
+          ? { ...c, name: data.name }
+          : c
+      ));
+      
+      setIsEditDialogOpen(false);
+      setSelectedColumn(null);
+    } catch (err: any) {
+      setError(err.message || 'Erro ao salvar alterações');
+      throw err;
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedColumn) return;
+    
+    try {
+      // Primeiro, excluir todas as tarefas da coluna
+      const columnTasks = tasks.filter(task => task.columnId === selectedColumn.id);
+      for (const task of columnTasks) {
+        await taskService.deleteTask(task.id);
+      }
+      
+      // Depois, excluir a coluna
+      await columnService.deleteColumn(selectedColumn.id);
+      
+      // Atualizar o estado local
+      setColumns(prev => prev.filter(c => c.id !== selectedColumn.id));
+      setTasks(prev => prev.filter(t => t.columnId !== selectedColumn.id));
+      
+      setIsDeleteDialogOpen(false);
+      setSelectedColumn(null);
+    } catch (err: any) {
+      setError(err.message || 'Erro ao excluir coluna');
+      throw err;
+    }
+  };
+
   if (isLoading) {
     return (
       <Layout>
@@ -284,6 +359,10 @@ export function ProjectsPage() {
                   workspaceColor={workspace?.color}
                   onTaskCreated={handleTaskCreated}
                   onTaskMoved={handleTaskMoved}
+                  onTaskUpdated={handleTaskUpdated}
+                  onTaskDeleted={handleTaskDeleted}
+                  onEdit={() => handleEditColumn(column)}
+                  onDelete={() => handleDeleteColumn(column)}
                 />
               ))}
             </div>
@@ -312,6 +391,28 @@ export function ProjectsPage() {
           onCreateCard={handleCreateCardSubmit}
           projectName={project.name}
           workspaceColor={workspace?.color}
+        />
+
+        <EditColumnDialog
+          isOpen={isEditDialogOpen}
+          onClose={() => {
+            setIsEditDialogOpen(false);
+            setSelectedColumn(null);
+          }}
+          onSave={handleSaveColumn}
+          currentName={selectedColumn?.name || ''}
+        />
+
+        <ConfirmDeleteDialog
+          isOpen={isDeleteDialogOpen}
+          onClose={() => {
+            setIsDeleteDialogOpen(false);
+            setSelectedColumn(null);
+          }}
+          onConfirm={handleConfirmDelete}
+          title="Excluir Card"
+          message="Tem certeza que deseja excluir este card? Todas as tarefas associadas também serão excluídas permanentemente."
+          itemName={selectedColumn?.name || ''}
         />
       </div>
     </Layout>

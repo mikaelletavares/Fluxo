@@ -2,34 +2,24 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { CreateWorkspaceDialog } from '@/components/CreateWorkspaceDialog';
+import { EditWorkspaceDialog } from '@/components/EditWorkspaceDialog';
+import { ConfirmDeleteDialog } from '@/components/ConfirmDeleteDialog';
+import { WorkspaceCard } from '@/components/WorkspaceCard';
 import { Layout } from '@/components/Layout';
 import { Logo } from '@/components/Logo';
 import { workspaceService } from '@/services/workspace.service';
 import { Workspace } from '@/types/firebase';
 import styles from './styles/dashboard.module.css';
 
-// Função para criar degradê baseado na cor
-const createGradient = (color: string) => {
-  // Converter hex para RGB
-  const hex = color.replace('#', '');
-  const r = parseInt(hex.substr(0, 2), 16);
-  const g = parseInt(hex.substr(2, 2), 16);
-  const b = parseInt(hex.substr(4, 2), 16);
-  
-  // Criar cor mais clara (adicionar 40% de branco)
-  const lightR = Math.min(255, Math.round(r + (255 - r) * 0.4));
-  const lightG = Math.min(255, Math.round(g + (255 - g) * 0.4));
-  const lightB = Math.min(255, Math.round(b + (255 - b) * 0.4));
-  
-  const lightColor = `rgb(${lightR}, ${lightG}, ${lightB})`;
-  
-  return `linear-gradient(135deg, ${color} 0%, ${lightColor} 100%)`;
-};
+
 
 export function DashboardPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [selectedWorkspace, setSelectedWorkspace] = useState<Workspace | null>(null);
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -76,18 +66,64 @@ export function DashboardPage() {
     loadWorkspaces();
   }, [user]);
 
-  const handleCreateWorkspaceSubmit = async (name: string, color: string) => {
+  const handleCreateWorkspaceSubmit = async (name: string, description: string, color: string) => {
     if (!user) return;
     
     try {
       const newWorkspace = await workspaceService.createWorkspace({
         name,
+        description: description || undefined,
         color,
         userId: user.id
       });
       setWorkspaces(prev => [...prev, newWorkspace]);
     } catch (err: any) {
       setError(err.message || 'Erro ao criar área de trabalho');
+    }
+  };
+
+  const handleEditWorkspace = (workspace: Workspace) => {
+    setSelectedWorkspace(workspace);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleDeleteWorkspace = (workspace: Workspace) => {
+    setSelectedWorkspace(workspace);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleSaveWorkspace = async (data: { name: string; description?: string }) => {
+    if (!selectedWorkspace) return;
+    
+    try {
+      await workspaceService.updateWorkspace(selectedWorkspace.id, data);
+      
+      // Atualizar o workspace na lista local
+      setWorkspaces(prev => prev.map(w => 
+        w.id === selectedWorkspace.id 
+          ? { ...w, name: data.name, description: data.description }
+          : w
+      ));
+      
+      setIsEditDialogOpen(false);
+      setSelectedWorkspace(null);
+    } catch (err: any) {
+      setError(err.message || 'Erro ao salvar alterações');
+      throw err;
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedWorkspace) return;
+    
+    try {
+      await workspaceService.deleteWorkspace(selectedWorkspace.id);
+      setWorkspaces(prev => prev.filter(w => w.id !== selectedWorkspace.id));
+      setIsDeleteDialogOpen(false);
+      setSelectedWorkspace(null);
+    } catch (err: any) {
+      setError(err.message || 'Erro ao excluir área de trabalho');
+      throw err;
     }
   };
 
@@ -140,26 +176,13 @@ export function DashboardPage() {
         <div className={styles.workspaceGrid}>
           {workspaces.length > 0 ? (
             workspaces.map((workspace) => (
-              <div 
-                key={workspace.id} 
-                className={styles.workspaceCard}
-                style={{ background: createGradient(workspace.color) }}
+              <WorkspaceCard
+                key={workspace.id}
+                workspace={workspace}
                 onClick={() => navigate(`/desktop/${workspace.id}`)}
-              >
-                <div 
-                  className={styles.workspaceIcon}
-                  style={{ backgroundColor: 'rgba(255, 255, 255, 0.15)', color: 'white' }}
-                >
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V8C22 6.9 21.1 6 20 6H12L10 4Z" fill="currentColor"/>
-                  </svg>
-                </div>
-                <h3 style={{ color: 'white' }}>{workspace.name}</h3>
-                <p style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Área de trabalho personalizada</p>
-                <div className={styles.workspaceAction} style={{ color: 'white' }}>
-                  <span>Abrir →</span>
-                </div>
-              </div>
+                onEdit={() => handleEditWorkspace(workspace)}
+                onDelete={() => handleDeleteWorkspace(workspace)}
+              />
             ))
           ) : (
             <div className={styles.emptyWorkspaces}>
@@ -180,6 +203,29 @@ export function DashboardPage() {
           isOpen={isDialogOpen}
           onClose={handleCloseDialog}
           onCreateWorkspace={handleCreateWorkspaceSubmit}
+        />
+
+        <EditWorkspaceDialog
+          isOpen={isEditDialogOpen}
+          onClose={() => {
+            setIsEditDialogOpen(false);
+            setSelectedWorkspace(null);
+          }}
+          onSave={handleSaveWorkspace}
+          currentName={selectedWorkspace?.name || ''}
+          currentDescription={selectedWorkspace?.description}
+        />
+
+        <ConfirmDeleteDialog
+          isOpen={isDeleteDialogOpen}
+          onClose={() => {
+            setIsDeleteDialogOpen(false);
+            setSelectedWorkspace(null);
+          }}
+          onConfirm={handleConfirmDelete}
+          title="Excluir Área de Trabalho"
+          message="Tem certeza que deseja excluir esta área de trabalho? Todos os projetos, cards e tarefas associados também serão excluídos permanentemente."
+          itemName={selectedWorkspace?.name || ''}
         />
       </div>
     </Layout>

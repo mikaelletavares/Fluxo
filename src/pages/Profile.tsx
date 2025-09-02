@@ -5,6 +5,7 @@ import { Layout } from '@/components/Layout';
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/Button';
 import { ImageUpload } from '@/components/ImageUpload';
+import { EditProfileDialog } from '@/components/EditProfileDialog';
 import { userService } from '@/services/user.service';
 import { UserProfile } from '@/context/AuthContext';
 import styles from './styles/profile.module.css';
@@ -15,6 +16,7 @@ export function ProfilePage() {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   useEffect(() => {
     const loadUserProfile = async () => {
@@ -68,6 +70,36 @@ export function ProfilePage() {
       setUserProfile(prev => prev ? { ...prev, photoURL: undefined } : null);
     } catch (error) {
       console.error('Erro ao deletar imagem:', error);
+      throw error;
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleEditProfile = () => {
+    setIsEditDialogOpen(true);
+  };
+
+  const handleSaveProfile = async (data: { name: string; birthDate?: string }) => {
+    if (!user) return;
+    
+    try {
+      setIsUpdating(true);
+      await userService.updateUserProfile(user.id, {
+        name: data.name,
+        birthDate: data.birthDate
+      });
+      
+      // Atualizar o perfil local
+      setUserProfile(prev => prev ? { 
+        ...prev, 
+        name: data.name, 
+        birthDate: data.birthDate 
+      } : null);
+      
+      console.log('Perfil atualizado com sucesso');
+    } catch (error) {
+      console.error('Erro ao atualizar perfil:', error);
       throw error;
     } finally {
       setIsUpdating(false);
@@ -132,7 +164,21 @@ export function ProfilePage() {
           </div>
 
           <div className={styles.infoSection}>
-            <h2 className={styles.sectionTitle}>Informações Pessoais</h2>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Informações Pessoais</h2>
+              <Button
+                onClick={handleEditProfile}
+                variant="secondary"
+                className={styles.editButton}
+                disabled={isUpdating}
+                title="Editar Perfil"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </Button>
+            </div>
             <div className={styles.infoGrid}>
               <div className={styles.infoItem}>
                 <div className={styles.infoIcon}>
@@ -177,6 +223,14 @@ export function ProfilePage() {
             </div>
           </div>
         </div>
+
+        <EditProfileDialog
+          isOpen={isEditDialogOpen}
+          onClose={() => setIsEditDialogOpen(false)}
+          onSave={handleSaveProfile}
+          currentName={userProfile?.name || user.name}
+          currentBirthDate={userProfile?.birthDate}
+        />
       </div>
     </Layout>
   );

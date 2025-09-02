@@ -11,6 +11,7 @@ export interface FirebaseUser {
 export interface Workspace {
   id: string;
   name: string;
+  description?: string;
   color: string;
   userId: string;
   createdAt: Date;
@@ -36,6 +37,11 @@ export interface Column {
   createdAt: Date;
 }
 
+export enum TaskStatus {
+  PENDING = 'pending',
+  COMPLETED = 'completed'
+}
+
 export interface Task {
   id: string;
   title: string;
@@ -43,6 +49,10 @@ export interface Task {
   position: number;
   columnId: string;
   projectId: string;
+  status: TaskStatus;
+  startDate?: string;
+  endDate?: string;
+  comments?: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -50,6 +60,7 @@ export interface Task {
 // Tipos para criação (sem id e timestamps)
 export interface CreateWorkspace {
   name: string;
+  description?: string;
   color: string;
   userId: string;
 }
@@ -74,4 +85,8 @@ export interface CreateTask {
   position: number;
   columnId: string;
   projectId: string;
+  status: TaskStatus;
+  startDate?: string;
+  endDate?: string;
+  comments?: string[];
 }

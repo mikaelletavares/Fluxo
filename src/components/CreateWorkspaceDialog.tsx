@@ -6,7 +6,7 @@ import styles from './styles/createWorkspaceDialog.module.css';
 interface CreateWorkspaceDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreateWorkspace: (name: string, color: string) => void;
+  onCreateWorkspace: (name: string, description: string, color: string) => void;
 }
 
 const WORKSPACE_COLORS = [
@@ -22,13 +22,15 @@ const WORKSPACE_COLORS = [
 
 export function CreateWorkspaceDialog({ isOpen, onClose, onCreateWorkspace }: CreateWorkspaceDialogProps) {
   const [workspaceName, setWorkspaceName] = useState('');
+  const [workspaceDescription, setWorkspaceDescription] = useState('');
   const [selectedColor, setSelectedColor] = useState(WORKSPACE_COLORS[0].value);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (workspaceName.trim()) {
-      onCreateWorkspace(workspaceName.trim(), selectedColor);
+      onCreateWorkspace(workspaceName.trim(), workspaceDescription.trim(), selectedColor);
       setWorkspaceName('');
+      setWorkspaceDescription('');
       setSelectedColor(WORKSPACE_COLORS[0].value);
       onClose();
     }
@@ -36,6 +38,7 @@ export function CreateWorkspaceDialog({ isOpen, onClose, onCreateWorkspace }: Cr
 
   const handleClose = () => {
     setWorkspaceName('');
+    setWorkspaceDescription('');
     setSelectedColor(WORKSPACE_COLORS[0].value);
     onClose();
   };
@@ -64,6 +67,20 @@ export function CreateWorkspaceDialog({ isOpen, onClose, onCreateWorkspace }: Cr
               value={workspaceName}
               onChange={(e) => setWorkspaceName(e.target.value)}
               required
+            />
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label htmlFor="workspaceDescription" className={styles.label}>
+              Descrição (opcional)
+            </label>
+            <textarea
+              id="workspaceDescription"
+              className={styles.textarea}
+              placeholder="Descreva o propósito desta área de trabalho"
+              value={workspaceDescription}
+              onChange={(e) => setWorkspaceDescription(e.target.value)}
+              rows={3}
             />
           </div>
 

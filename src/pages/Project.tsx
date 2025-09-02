@@ -92,6 +92,14 @@ function ProjectContent() {
     }
   };
 
+  const handleTaskUpdate = (updatedTask: any) => {
+    // Atualizar a tarefa no estado local
+    dispatch({
+      type: BoardActionType.UPDATE_TASK,
+      payload: updatedTask
+    });
+  };
+
   if (state.isLoading) {
     return (
       <div className={styles.statusMessage}>
@@ -123,6 +131,7 @@ function ProjectContent() {
                 droppableId={column.id}
                 onEditTask={handleEditTask}
                 onDeleteTask={handleDeleteTask}
+                onTaskUpdate={handleTaskUpdate}
               />
             );
           })}

@@ -158,6 +158,10 @@
   min-width: 120px;
 }
 
+
+
+
+
 /* Responsividade */
 @media (max-width: 640px) {
   .overlay {

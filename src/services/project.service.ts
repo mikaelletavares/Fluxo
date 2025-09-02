@@ -131,12 +131,31 @@ class ProjectService {
     }
   }
 
-  // Deletar projeto
+  // Deletar projeto e todos os dados relacionados
   async deleteProject(projectId: string): Promise<void> {
     try {
+      // Importar outros serviços para exclusão em cascata
+      const { columnService } = await import('./column.service');
+      const { taskService } = await import('./task.service');
+
+      // 1. Buscar todas as colunas do projeto
+      const columns = await columnService.getProjectColumns(projectId);
+      
+      // 2. Para cada coluna, excluir todas as tarefas
+      for (const column of columns) {
+        const tasks = await taskService.getColumnTasks(column.id);
+        for (const task of tasks) {
+          await taskService.deleteTask(task.id);
+        }
+        // Excluir a coluna
+        await columnService.deleteColumn(column.id);
+      }
+      
+      // 3. Finalmente, excluir o projeto
       await deleteDoc(doc(db, this.collectionName, projectId));
     } catch (error) {
-      throw new Error('Erro ao deletar projeto');
+      console.error('Erro ao deletar projeto:', error);
+      throw new Error('Erro ao deletar projeto e dados relacionados');
     }
   }
 

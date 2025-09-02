@@ -1,5 +1,5 @@
 import React from 'react';
-import { Column as ColumnType, Task } from '@/types';
+import { Column as ColumnType, Task } from '@/types/firebase';
 import { TaskCard } from './TaskCard';
 import styles from './styles/Column.module.css';
 import { useDroppable } from '@dnd-kit/core';
@@ -8,11 +8,12 @@ interface ColumnProps {
   column: ColumnType;
   tasks: Task[];
   droppableId: string;
-  onEditTask: (taskId: string, newTitle: string) => void; // NOVO
-  onDeleteTask: (taskId: string) => void; // NOVO
+  onEditTask: (taskId: string, newTitle: string) => void;
+  onDeleteTask: (taskId: string) => void;
+  onTaskUpdate?: (updatedTask: Task) => void;
 }
 
-export function Column({ column, tasks, droppableId, onEditTask, onDeleteTask }: ColumnProps) {
+export function Column({ column, tasks, droppableId, onEditTask, onDeleteTask, onTaskUpdate }: ColumnProps) {
   const { setNodeRef } = useDroppable({
     id: droppableId,
   });
@@ -30,6 +31,7 @@ export function Column({ column, tasks, droppableId, onEditTask, onDeleteTask }:
               if (newTitle) onEditTask(task.id, newTitle);
             }} 
             onDelete={() => onDeleteTask(task.id)}
+            onTaskUpdate={onTaskUpdate}
           />
         ))}
       </div>

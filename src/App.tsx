@@ -11,6 +11,7 @@ import { DesktopPage } from './pages/Desktop';
 import { ProjectPage } from './pages/Project';
 import { ProjectsPage } from './pages/ProjectsPage'; 
 import { ProfilePage } from './pages/Profile';
+import { TestTaskCard } from './pages/TestTaskCard';
 
 const queryClient = new QueryClient();
 
@@ -71,6 +72,10 @@ function App() {
                   <ProfilePage />
                 </RequireAuth>
               }
+            />
+            <Route
+              path="/test-taskcard"
+              element={<TestTaskCard />}
             />
             <Route path="/" element={<LoginPage />} />
           </Routes>

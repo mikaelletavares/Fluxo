@@ -1,0 +1,113 @@
+.dialogOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.dialogContent {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  width: 90%;
+  max-width: 450px;
+  animation: fadeIn 0.3s ease-out;
+  text-align: center;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  color: #ef4444;
+}
+
+.dialogTitle {
+  font-size: 1.5rem;
+  color: #1f2937;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.dialogMessage {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.itemName {
+  font-size: 1.1rem;
+  color: #162456;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.warningMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #f59e0b;
+  font-size: 0.875rem;
+  margin-bottom: 2rem;
+  padding: 0.75rem;
+  background-color: #fffbeb;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+}
+
+.warningMessage svg {
+  flex-shrink: 0;
+}
+
+.dialogActions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.dialogActions button {
+  min-width: 120px;
+}
+
+@media (max-width: 480px) {
+  .dialogContent {
+    padding: 1.5rem;
+  }
+
+  .dialogTitle {
+    font-size: 1.25rem;
+  }
+
+  .dialogActions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .dialogActions button {
+    width: 100%;
+    min-width: unset;
+  }
+}

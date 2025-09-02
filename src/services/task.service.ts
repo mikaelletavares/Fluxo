@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, serverTimestamp, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Task, CreateTask } from '@/types/firebase';
 
@@ -15,7 +15,11 @@ class TaskService {
         position: taskData.position,
         columnId: taskData.columnId,
         projectId: taskData.projectId,
-        ...(taskData.description && { description: taskData.description })
+        status: taskData.status,
+        ...(taskData.description && { description: taskData.description }),
+        ...(taskData.startDate && { startDate: taskData.startDate }),
+        ...(taskData.endDate && { endDate: taskData.endDate }),
+        ...(taskData.comments && { comments: taskData.comments })
       };
       
       const docRef = await addDoc(collection(db, this.collectionName), {
@@ -58,6 +62,10 @@ class TaskService {
           position: data.position,
           columnId: data.columnId,
           projectId: data.projectId,
+          status: data.status || 'pending',
+          startDate: data.startDate,
+          endDate: data.endDate,
+          comments: data.comments || [],
           createdAt: data.createdAt?.toDate() || new Date(),
           updatedAt: data.updatedAt?.toDate() || new Date()
         });
@@ -90,6 +98,10 @@ class TaskService {
           position: data.position,
           columnId: data.columnId,
           projectId: data.projectId,
+          status: data.status || 'pending',
+          startDate: data.startDate,
+          endDate: data.endDate,
+          comments: data.comments || [],
           createdAt: data.createdAt?.toDate() || new Date(),
           updatedAt: data.updatedAt?.toDate() || new Date()
         });
@@ -127,6 +139,19 @@ class TaskService {
       await deleteDoc(taskRef);
     } catch (error) {
       throw new Error('Erro ao excluir tarefa');
+    }
+  }
+
+  async updateTaskStatus(taskId: string, status: string): Promise<void> {
+    try {
+      const taskRef = doc(db, this.collectionName, taskId);
+      
+      await updateDoc(taskRef, {
+        status: status,
+        updatedAt: serverTimestamp()
+      });
+    } catch (error) {
+      throw new Error('Erro ao atualizar status da tarefa');
     }
   }
 }
