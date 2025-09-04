@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,6 +20,7 @@
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
+  border: 1px solid var(--color-border);
 }
 
 .header {
@@ -124,14 +125,14 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background-color: #f8fafc;
-  border: 2px solid #e2e8f0;
+  background-color: var(--color-background-secondary);
+  border: 2px solid var(--color-border);
   border-radius: 8px;
   transition: border-color 0.2s;
 }
 
 .previewCard:hover {
-  border-color: #162456;
+  border-color: var(--color-primary);
 }
 
 .previewIcon {
@@ -142,7 +143,7 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 
@@ -153,14 +154,14 @@
 
 .previewTitle {
   font-size: 1.1rem;
-  color: #1f2937;
+  color: var(--color-text-primary);
   margin: 0 0 0.25rem 0;
   font-weight: 600;
 }
 
 .previewDescription {
   font-size: 0.9rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin: 0;
   line-height: 1.4;
 }
@@ -170,7 +171,7 @@
   gap: 1rem;
   justify-content: flex-end;
   padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-border);
 }
 
 .actions button {

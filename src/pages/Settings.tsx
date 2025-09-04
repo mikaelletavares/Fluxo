@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -10,7 +10,7 @@ import { UserProfile } from '@/context/AuthContext';
 import styles from './styles/settings.module.css';
 
 export function SettingsPage() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -56,14 +56,6 @@ export function SettingsPage() {
     loadUserProfile();
   }, [user]);
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/');
-    } catch (error) {
-      console.error('Erro ao fazer logout:', error);
-    }
-  };
 
   const handleSaveSettings = async () => {
     if (!user) return;
@@ -102,7 +94,6 @@ export function SettingsPage() {
           <div className={styles.headerLeft}>
             <div className={styles.logoContainer}>
               <Logo />
-              <h1 className={styles.brandName}>Fluxo</h1>
             </div>
             <div className={styles.breadcrumb}>
               <span className={styles.breadcrumbItem}>Dashboard</span>
@@ -203,7 +194,7 @@ export function SettingsPage() {
                        </div>
                        <div className={styles.settingValue}>
                          <span className={styles.settingText}>{userProfile?.email || 'Não definido'}</span>
-                         <Button variant="secondary" size="small" onClick={() => navigate('/perfil')}>
+                         <Button variant="secondary" onClick={() => navigate('/perfil')}>
                            Editar
                          </Button>
                        </div>
@@ -215,7 +206,7 @@ export function SettingsPage() {
                        </div>
                        <div className={styles.settingValue}>
                          <span className={styles.settingText}>••••••••</span>
-                         <Button variant="secondary" size="small">
+                         <Button variant="secondary">
                            Alterar Senha
                          </Button>
                        </div>

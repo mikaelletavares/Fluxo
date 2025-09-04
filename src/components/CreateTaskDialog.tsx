@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Button } from './Button';
 import { Input } from './Input';
 import styles from './styles/createTaskDialog.module.css';
@@ -42,7 +43,7 @@ export function CreateTaskDialog({
 
   if (!isOpen) return null;
 
-  return (
+  const dialogContent = (
     <div className={styles.overlay} onClick={handleClose}>
       <div className={styles.dialog} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
@@ -84,8 +85,6 @@ export function CreateTaskDialog({
             />
           </div>
 
-
-
           <div className={styles.preview}>
             <label className={styles.label}>Preview</label>
             <div className={styles.previewTask}>
@@ -98,7 +97,6 @@ export function CreateTaskDialog({
                     {taskDescription}
                   </p>
                 )}
-
               </div>
             </div>
           </div>
@@ -122,4 +120,6 @@ export function CreateTaskDialog({
       </div>
     </div>
   );
+
+  return createPortal(dialogContent, document.body);
 }

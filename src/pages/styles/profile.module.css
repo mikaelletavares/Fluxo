@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background: var(--gradient-secondary);
+  background: var(--color-background);
   padding: 0;
 }
 
@@ -38,7 +38,7 @@
   justify-content: center;
   min-height: 50vh;
   font-size: 1.1rem;
-  color: #666;
+  color: var(--color-text-secondary);
 }
 
 .content {
@@ -48,12 +48,12 @@
 }
 
 .profileCard {
-  background: white;
+  background: var(--color-background);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
   padding: 2rem;
   margin-bottom: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--color-border);
 }
 
 .profileHeader {
@@ -73,40 +73,21 @@
 
 .userName {
   font-size: 2rem;
-  color: #162456;
+  color: var(--color-text-primary);
   margin: 0 0 0.5rem 0;
   font-weight: 700;
 }
 
 .userEmail {
-  color: #666;
+  color: var(--color-text-secondary);
   margin: 0;
   font-size: 1.1rem;
 }
 
-.settingsButton {
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.settingsButton:hover {
-  background-color: #5a6268;
-  transform: translateY(-1px);
-}
 
 .logoutButton {
-  background-color: #dc3545;
-  color: white;
+  background-color: var(--color-error);
+  color: var(--color-text-inverse);
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -117,16 +98,16 @@
 }
 
 .logoutButton:hover {
-  background-color: #c82333;
+  background-color: var(--color-error-text);
   transform: translateY(-1px);
 }
 
 .infoSection {
-  background: white;
+  background: var(--color-background);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
   padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--color-border);
 }
 
 .sectionHeader {
@@ -138,7 +119,7 @@
 
 .sectionTitle {
   font-size: 1.5rem;
-  color: #162456;
+  color: var(--color-text-primary);
   margin: 0;
   font-weight: 700;
 }
@@ -147,9 +128,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f8f9fa;
-  color: #162456;
-  border: 1px solid #e9ecef;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
   padding: 0.5rem;
   border-radius: 50%;
   width: 40px;
@@ -159,10 +140,10 @@
 }
 
 .editButton:hover:not(:disabled) {
-  background-color: #e9ecef;
-  border-color: #dee2e6;
+  background-color: var(--color-background-tertiary);
+  border-color: var(--color-border-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .editButton:disabled {
@@ -182,15 +163,15 @@
   align-items: center;
   gap: 1rem;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: var(--color-background-secondary);
   border-radius: 12px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-border);
   transition: all 0.2s ease;
 }
 
 .infoItem:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .infoIcon {
@@ -199,9 +180,9 @@
   justify-content: center;
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, #162456, #1e3a8a);
+  background: var(--color-primary);
   border-radius: 12px;
-  color: white;
+  color: var(--color-text-inverse);
   flex-shrink: 0;
 }
 
@@ -215,14 +196,14 @@
 .infoLabel {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #666;
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .infoValue {
   font-size: 1.1rem;
-  color: #162456;
+  color: var(--color-text-primary);
   font-weight: 600;
   word-break: break-word;
 }
