@@ -29,7 +29,7 @@
 /* Container azul escuro - lateral esquerda */
 .leftPanel {
   flex: 1;
-  background: #162456;
+  background: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,7 +99,7 @@
 /* Container do formulário - lateral direita */
 .rightPanel {
   flex: 1;
-  background-color: #ffffff;
+  background-color: var(--color-background);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -148,18 +148,18 @@
 
 .label {
   font-weight: 500;
-  color: #374151;
+  color: var(--color-text-primary);
   font-size: 0.9rem;
 }
 
 .error {
-  color: #dc2626;
+  color: var(--color-error);
   text-align: center;
   font-size: 0.9rem;
   margin: 0;
   padding: 0.75rem;
-  background-color: #fef2f2;
-  border: 1px solid #fecaca;
+  background-color: var(--color-error-bg);
+  border: 1px solid var(--color-error);
   border-radius: 6px;
 }
 

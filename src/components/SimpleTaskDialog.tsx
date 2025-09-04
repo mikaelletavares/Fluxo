@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Task, TaskStatus } from '@/types/firebase';
 import { ConfirmDeleteDialog } from './ConfirmDeleteDialog';
+import { useTheme } from '@/context/ThemeContext';
 
 interface SimpleTaskDialogProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ interface SimpleTaskDialogProps {
 }
 
 export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: SimpleTaskDialogProps) {
+  const { theme } = useTheme();
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description || '');
   const [status, setStatus] = useState<TaskStatus>(task.status);
@@ -92,7 +94,7 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
       left: 0,
       width: '100vw',
       height: '100vh',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.5)',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -101,26 +103,27 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
       padding: 0
     }}>
       <div style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--color-background)',
         borderRadius: '16px',
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+        boxShadow: 'var(--shadow-xl)',
         width: '90%',
         maxWidth: '600px',
         maxHeight: '90vh',
         overflowY: 'auto',
-        animation: 'fadeIn 0.3s ease-out'
+        animation: 'fadeIn 0.3s ease-out',
+        border: '1px solid var(--color-border)'
       }}>
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '1.5rem 2rem',
-          borderBottom: '1px solid #e5e7eb'
+          borderBottom: '1px solid var(--color-border)'
         }}>
           <h2 style={{
             fontSize: '1.5rem',
             fontWeight: '700',
-            color: '#1f2937',
+            color: 'var(--color-text-primary)',
             margin: 0
           }}>
             Editar Tarefa
@@ -132,7 +135,7 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
               background: 'none',
               border: 'none',
               fontSize: '1.5rem',
-              color: '#6b7280',
+              color: 'var(--color-text-secondary)',
               cursor: 'pointer',
               padding: '0.5rem',
               borderRadius: '8px',
@@ -140,7 +143,18 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
               height: '2rem',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              transition: 'color 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              if (!isLoading) {
+                e.currentTarget.style.color = 'var(--color-text-primary)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isLoading) {
+                e.currentTarget.style.color = 'var(--color-text-secondary)';
+              }
             }}
           >
             ×
@@ -154,7 +168,7 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
               display: 'block',
               fontSize: '0.875rem',
               fontWeight: '600',
-              color: '#374151',
+              color: 'var(--color-text-primary)',
               marginBottom: '0.5rem'
             }}>
               Título
@@ -167,11 +181,21 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
               style={{
                 width: '100%',
                 padding: '0.75rem 1rem',
-                border: '1px solid #d1d5db',
+                border: '1px solid var(--color-border)',
                 borderRadius: '8px',
                 fontSize: '0.875rem',
-                color: '#374151',
-                boxSizing: 'border-box'
+                color: 'var(--color-text-primary)',
+                backgroundColor: 'var(--color-background)',
+                boxSizing: 'border-box',
+                transition: 'border-color 0.2s ease'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = 'var(--color-primary)';
+                e.target.style.boxShadow = '0 0 0 3px rgba(79, 70, 229, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = 'var(--color-border)';
+                e.target.style.boxShadow = 'none';
               }}
             />
           </div>
@@ -182,7 +206,7 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
               display: 'block',
               fontSize: '0.875rem',
               fontWeight: '600',
-              color: '#374151',
+              color: 'var(--color-text-primary)',
               marginBottom: '0.5rem'
             }}>
               Status
@@ -194,14 +218,15 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
                 disabled={isLoading}
                 style={{
                   padding: '0.5rem 1rem',
-                  border: `2px solid ${status === TaskStatus.PENDING ? '#3b82f6' : '#d1d5db'}`,
+                  border: `2px solid ${status === TaskStatus.PENDING ? 'var(--color-primary)' : 'var(--color-border)'}`,
                   borderRadius: '8px',
-                  backgroundColor: status === TaskStatus.PENDING ? '#eff6ff' : '#ffffff',
-                  color: status === TaskStatus.PENDING ? '#1d4ed8' : '#6b7280',
+                  backgroundColor: status === TaskStatus.PENDING ? 'var(--color-primary-light)' : 'var(--color-background)',
+                  color: status === TaskStatus.PENDING ? (theme === 'dark' ? 'var(--color-text-inverse)' : 'var(--color-primary)') : 'var(--color-text-secondary)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.5rem'
+                  gap: '0.5rem',
+                  transition: 'all 0.2s ease'
                 }}
               >
                 <span style={{
@@ -218,14 +243,15 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
                 disabled={isLoading}
                 style={{
                   padding: '0.5rem 1rem',
-                  border: `2px solid ${status === TaskStatus.COMPLETED ? '#3b82f6' : '#d1d5db'}`,
+                  border: `2px solid ${status === TaskStatus.COMPLETED ? 'var(--color-primary)' : 'var(--color-border)'}`,
                   borderRadius: '8px',
-                  backgroundColor: status === TaskStatus.COMPLETED ? '#eff6ff' : '#ffffff',
-                  color: status === TaskStatus.COMPLETED ? '#1d4ed8' : '#6b7280',
+                  backgroundColor: status === TaskStatus.COMPLETED ? 'var(--color-primary-light)' : 'var(--color-background)',
+                  color: status === TaskStatus.COMPLETED ? (theme === 'dark' ? 'var(--color-text-inverse)' : 'var(--color-primary)') : 'var(--color-text-secondary)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.5rem'
+                  gap: '0.5rem',
+                  transition: 'all 0.2s ease'
                 }}
               >
                 <span style={{
@@ -245,7 +271,7 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
               display: 'block',
               fontSize: '0.875rem',
               fontWeight: '600',
-              color: '#374151',
+              color: 'var(--color-text-primary)',
               marginBottom: '0.5rem'
             }}>
               Descrição
@@ -259,14 +285,24 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
               style={{
                 width: '100%',
                 padding: '0.75rem 1rem',
-                border: '1px solid #d1d5db',
+                border: '1px solid var(--color-border)',
                 borderRadius: '8px',
                 fontSize: '0.875rem',
-                color: '#374151',
+                color: 'var(--color-text-primary)',
+                backgroundColor: 'var(--color-background)',
                 boxSizing: 'border-box',
                 resize: 'vertical',
                 minHeight: '100px',
-                fontFamily: 'inherit'
+                fontFamily: 'inherit',
+                transition: 'border-color 0.2s ease'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = 'var(--color-primary)';
+                e.target.style.boxShadow = '0 0 0 3px rgba(79, 70, 229, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = 'var(--color-border)';
+                e.target.style.boxShadow = 'none';
               }}
             />
           </div>
@@ -283,7 +319,7 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
                 display: 'block',
                 fontSize: '0.875rem',
                 fontWeight: '600',
-                color: '#374151',
+                color: 'var(--color-text-primary)',
                 marginBottom: '0.5rem'
               }}>
                 Data de Início
@@ -296,11 +332,24 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
                 style={{
                   width: '100%',
                   padding: '0.75rem 1rem',
-                  border: '1px solid #d1d5db',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '8px',
                   fontSize: '0.875rem',
-                  color: '#374151',
-                  boxSizing: 'border-box'
+                  color: 'var(--color-text-primary)',
+                  backgroundColor: 'var(--color-background)',
+                  boxSizing: 'border-box',
+                  transition: 'border-color 0.2s ease',
+                  ...(theme === 'dark' && {
+                    colorScheme: 'dark'
+                  })
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = 'var(--color-primary)';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(79, 70, 229, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--color-border)';
+                  e.target.style.boxShadow = 'none';
                 }}
               />
             </div>
@@ -309,7 +358,7 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
                 display: 'block',
                 fontSize: '0.875rem',
                 fontWeight: '600',
-                color: '#374151',
+                color: 'var(--color-text-primary)',
                 marginBottom: '0.5rem'
               }}>
                 Data de Término
@@ -322,11 +371,24 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
                 style={{
                   width: '100%',
                   padding: '0.75rem 1rem',
-                  border: '1px solid #d1d5db',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '8px',
                   fontSize: '0.875rem',
-                  color: '#374151',
-                  boxSizing: 'border-box'
+                  color: 'var(--color-text-primary)',
+                  backgroundColor: 'var(--color-background)',
+                  boxSizing: 'border-box',
+                  transition: 'border-color 0.2s ease',
+                  ...(theme === 'dark' && {
+                    colorScheme: 'dark'
+                  })
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = 'var(--color-primary)';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(79, 70, 229, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--color-border)';
+                  e.target.style.boxShadow = 'none';
                 }}
               />
             </div>
@@ -338,16 +400,16 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
               display: 'block',
               fontSize: '0.875rem',
               fontWeight: '600',
-              color: '#374151',
+              color: 'var(--color-text-primary)',
               marginBottom: '0.5rem'
             }}>
               Comentários
             </label>
             <div style={{
-              border: '1px solid #e5e7eb',
+              border: '1px solid var(--color-border)',
               borderRadius: '8px',
               padding: '1rem',
-              backgroundColor: '#f9fafb'
+              backgroundColor: 'var(--color-background-secondary)'
             }}>
               {comments.map((comment, index) => (
                 <div key={index} style={{
@@ -355,15 +417,15 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   padding: '0.75rem',
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #e5e7eb',
+                  backgroundColor: 'var(--color-background)',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '6px',
                   marginBottom: '0.5rem'
                 }}>
                   <span style={{
                     flex: 1,
                     fontSize: '0.875rem',
-                    color: '#374151',
+                    color: 'var(--color-text-primary)',
                     lineHeight: '1.4'
                   }}>
                     {comment}
@@ -375,7 +437,7 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: '#ef4444',
+                      color: 'var(--color-error)',
                       cursor: 'pointer',
                       padding: '0.25rem',
                       borderRadius: '4px',
@@ -385,7 +447,18 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
                       height: '1.5rem',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center'
+                      justifyContent: 'center',
+                      transition: 'color 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isLoading) {
+                        e.currentTarget.style.color = 'var(--color-error-text)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isLoading) {
+                        e.currentTarget.style.color = 'var(--color-error)';
+                      }
                     }}
                   >
                     ×
@@ -404,10 +477,20 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
                   style={{
                     flex: 1,
                     padding: '0.75rem 1rem',
-                    border: '1px solid #d1d5db',
+                    border: '1px solid var(--color-border)',
                     borderRadius: '8px',
                     fontSize: '0.875rem',
-                    color: '#374151'
+                    color: 'var(--color-text-primary)',
+                    backgroundColor: 'var(--color-background)',
+                    transition: 'border-color 0.2s ease'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = 'var(--color-primary)';
+                    e.target.style.boxShadow = '0 0 0 3px rgba(79, 70, 229, 0.1)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'var(--color-border)';
+                    e.target.style.boxShadow = 'none';
                   }}
                 />
                 <button
@@ -416,14 +499,25 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
                   disabled={!newComment.trim() || isLoading}
                   style={{
                     padding: '0.75rem 1.5rem',
-                    backgroundColor: '#3b82f6',
-                    color: '#ffffff',
+                    backgroundColor: 'var(--color-primary)',
+                    color: 'var(--color-text-inverse)',
                     border: 'none',
                     borderRadius: '8px',
                     fontSize: '0.875rem',
                     fontWeight: '600',
                     cursor: 'pointer',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
+                    transition: 'background-color 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isLoading && newComment.trim()) {
+                      e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isLoading && newComment.trim()) {
+                      e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+                    }
                   }}
                 >
                   Adicionar
@@ -438,7 +532,7 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
             justifyContent: 'space-between',
             alignItems: 'center',
             padding: '1.5rem 0 0 0',
-            borderTop: '1px solid #e5e7eb'
+            borderTop: '1px solid var(--color-border)'
           }}>
             {/* Botão de excluir à esquerda */}
             {onDelete && (
@@ -448,8 +542,8 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
                 disabled={isLoading}
                 style={{
                   padding: '0.75rem 1.5rem',
-                  backgroundColor: '#ef4444',
-                  color: '#ffffff',
+                  backgroundColor: 'var(--color-error)',
+                  color: 'var(--color-text-inverse)',
                   border: 'none',
                   borderRadius: '8px',
                   fontSize: '0.875rem',
@@ -459,12 +553,12 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
                 }}
                 onMouseEnter={(e) => {
                   if (!isLoading) {
-                    e.currentTarget.style.backgroundColor = '#dc2626';
+                    e.currentTarget.style.backgroundColor = 'var(--color-error-text)';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isLoading) {
-                    e.currentTarget.style.backgroundColor = '#ef4444';
+                    e.currentTarget.style.backgroundColor = 'var(--color-error)';
                   }
                 }}
               >
@@ -480,13 +574,26 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
                 disabled={isLoading}
                 style={{
                   padding: '0.75rem 1.5rem',
-                  backgroundColor: '#ffffff',
-                  color: '#374151',
-                  border: '1px solid #d1d5db',
+                  backgroundColor: 'var(--color-background)',
+                  color: 'var(--color-text-primary)',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '8px',
                   fontSize: '0.875rem',
                   fontWeight: '600',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isLoading) {
+                    e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)';
+                    e.currentTarget.style.borderColor = 'var(--color-border-dark)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isLoading) {
+                    e.currentTarget.style.backgroundColor = 'var(--color-background)';
+                    e.currentTarget.style.borderColor = 'var(--color-border)';
+                  }
                 }}
               >
                 Cancelar
@@ -496,13 +603,24 @@ export function SimpleTaskDialog({ isOpen, onClose, onUpdate, onDelete, task }: 
                 disabled={isLoading}
                 style={{
                   padding: '0.75rem 1.5rem',
-                  backgroundColor: '#10b981',
-                  color: '#ffffff',
+                  backgroundColor: 'var(--color-success)',
+                  color: 'var(--color-text-inverse)',
                   border: 'none',
                   borderRadius: '8px',
                   fontSize: '0.875rem',
                   fontWeight: '600',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isLoading) {
+                    e.currentTarget.style.backgroundColor = 'var(--color-success-text)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isLoading) {
+                    e.currentTarget.style.backgroundColor = 'var(--color-success)';
+                  }
                 }}
               >
                 {isLoading ? 'Salvando...' : 'Salvar'}

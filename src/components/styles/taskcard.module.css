@@ -1,7 +1,7 @@
 .taskCard {
-  background-color: white;
+  background-color: var(--color-background);
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
   padding: 1rem;
   margin-bottom: 0.75rem;
   cursor: pointer;
@@ -9,7 +9,7 @@
 }
 
 .taskCard:hover {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
 

@@ -12,9 +12,9 @@
 }
 
 .dialogContent {
-  background-color: #ffffff;
+  background-color: var(--color-background);
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-xl);
   padding: 2rem;
   width: 90%;
   max-width: 400px;
@@ -34,7 +34,7 @@
 
 .dialogTitle {
   font-size: 1.8rem;
-  color: #162456;
+  color: var(--color-primary);
   margin-bottom: 1.5rem;
   font-weight: 700;
   text-align: center;
@@ -47,7 +47,7 @@
 .label {
   display: block;
   font-size: 0.95rem;
-  color: #333;
+  color: var(--color-text-primary);
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
@@ -55,34 +55,35 @@
 .input {
   width: 100%;
   padding: 0.8rem 1rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   font-size: 1rem;
-  color: #333;
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   box-sizing: border-box;
 }
 
 .input:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
 }
 
 .input:disabled {
-  background-color: #f0f0f0;
+  background-color: var(--color-background-tertiary);
   cursor: not-allowed;
 }
 
 .errorMessage {
-  color: #e53e3e;
+  color: var(--color-error);
   font-size: 0.875rem;
   margin-top: 0.75rem;
   text-align: center;
-  background-color: #fef2f2;
+  background-color: var(--color-error-bg);
   padding: 0.5rem;
   border-radius: 6px;
-  border: 1px solid #fecaca;
+  border: 1px solid var(--color-error);
 }
 
 .dialogActions {

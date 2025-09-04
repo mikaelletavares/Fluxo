@@ -12,9 +12,9 @@
 }
 
 .dialogContent {
-  background-color: #ffffff;
+  background-color: var(--color-background);
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-xl);
   padding: 2rem;
   width: 90%;
   max-width: 450px;
@@ -42,14 +42,14 @@
 
 .dialogTitle {
   font-size: 1.5rem;
-  color: #1f2937;
+  color: var(--color-text-primary);
   margin-bottom: 1rem;
   font-weight: 700;
 }
 
 .dialogMessage {
   font-size: 1rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin-bottom: 1rem;
   line-height: 1.5;
 }

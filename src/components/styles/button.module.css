@@ -9,41 +9,42 @@
 }
 
 .primary {
-  background-color: #162456;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
 }
 
 .primary:hover:not(:disabled) {
-  background-color: #0f1a3a;
+  background-color: var(--color-primary-hover);
 }
 
 .danger {
-  background-color: #dc3545;
-  color: white;
+  background-color: var(--color-error);
+  color: var(--color-text-inverse);
 }
 
 .danger:hover:not(:disabled) {
-  background-color: #c82333;
+  background-color: #dc2626;
 }
 
 .secondary {
-  background-color: #6c757d;
-  color: white;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
 }
 
 .secondary:hover:not(:disabled) {
-  background-color: #545b62;
+  background-color: var(--color-background-tertiary);
 }
 
 .button:disabled {
-  background-color: #a0c9f1;
+  background-color: var(--color-text-tertiary);
   cursor: not-allowed;
 }
 
 .button:disabled.danger {
-  background-color: #f5c6cb;
+  background-color: var(--color-text-tertiary);
 }
 
 .button:disabled.secondary {
-  background-color: #c6c8ca;
+  background-color: var(--color-text-tertiary);
 }

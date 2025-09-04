@@ -1,6 +1,6 @@
 .projectCard {
-  background-color: #f8fafc;
-  border: 2px solid #e2e8f0;
+  background-color: var(--color-background);
+  border: 2px solid var(--color-border);
   border-radius: 12px;
   transition: all 0.2s ease-in-out;
   overflow: hidden;
@@ -9,8 +9,8 @@
 
 .projectCard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  border-color: #162456;
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
 }
 
 /* Menu Container */
@@ -28,24 +28,24 @@
   width: 32px;
   height: 32px;
   border: none;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--color-background-secondary);
   border-radius: 6px;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .menuButton:hover {
-  background: rgba(255, 255, 255, 1);
-  color: #374151;
+  background: var(--color-background-tertiary);
+  color: var(--color-text-primary);
   transform: scale(1.05);
 }
 
 .menuButton:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 0 2px var(--color-primary);
 }
 
 /* Dropdown Menu */
@@ -54,10 +54,10 @@
   top: 100%;
   right: 0;
   margin-top: 0.5rem;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-lg);
   z-index: 50;
   min-width: 160px;
   overflow: hidden;
@@ -83,7 +83,7 @@
   padding: 0.75rem 1rem;
   border: none;
   background: none;
-  color: #374151;
+  color: var(--color-text-primary);
   font-size: 0.875rem;
   font-weight: 500;
   text-align: left;
@@ -92,8 +92,8 @@
 }
 
 .dropdownItem:hover:not(:disabled) {
-  background-color: #f9fafb;
-  color: #1f2937;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
 }
 
 .dropdownItem:disabled {
@@ -102,16 +102,16 @@
 }
 
 .dropdownItem:first-child {
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .dropdownItem svg {
   flex-shrink: 0;
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 .dropdownItem:hover:not(:disabled) svg {
-  color: #374151;
+  color: var(--color-text-primary);
 }
 
 .projectLink {
@@ -136,18 +136,18 @@
   width: 48px;
   height: 48px;
   margin: 0 auto 1rem auto;
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 .projectTitle {
   font-size: 1.25rem;
-  color: #1f2937;
+  color: var(--color-text-primary);
   margin: 0 0 0.5rem 0;
   font-weight: 600;
 }
 
 .projectDescription {
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin: 0;
   font-size: 0.9rem;
   line-height: 1.4;

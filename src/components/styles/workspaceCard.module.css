@@ -1,6 +1,6 @@
 .workspaceCard {
-  background-color: #f8fafc;
-  border: 2px solid #e2e8f0;
+  background-color: var(--color-background-secondary);
+  border: 2px solid var(--color-border);
   border-radius: 12px;
   padding: 2rem;
   text-align: center;
@@ -12,7 +12,7 @@
 
 .workspaceCard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-xl);
 }
 
 .workspaceCard:hover::before {
@@ -73,10 +73,10 @@
   top: 100%;
   right: 0;
   margin-top: 0.5rem;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-lg);
   z-index: 50;
   min-width: 160px;
   overflow: hidden;
@@ -102,7 +102,7 @@
   padding: 0.75rem 1rem;
   border: none;
   background: none;
-  color: #374151;
+  color: var(--color-text-primary);
   font-size: 0.875rem;
   font-weight: 500;
   text-align: left;
@@ -111,8 +111,8 @@
 }
 
 .dropdownItem:hover:not(:disabled) {
-  background-color: #f9fafb;
-  color: #1f2937;
+  background-color: var(--color-background-tertiary);
+  color: var(--color-text-primary);
 }
 
 .dropdownItem:disabled {
@@ -121,16 +121,16 @@
 }
 
 .dropdownItem:first-child {
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .dropdownItem svg {
   flex-shrink: 0;
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 .dropdownItem:hover:not(:disabled) svg {
-  color: #374151;
+  color: var(--color-text-primary);
 }
 
 .workspaceIcon {
@@ -150,7 +150,7 @@
 
 .workspaceCard h3 {
   font-size: 1.25rem;
-  color: #1f2937;
+  color: var(--color-text-primary);
   margin: 0 0 0.5rem 0;
   font-weight: 600;
   position: relative;
@@ -158,7 +158,7 @@
 }
 
 .workspaceCard p {
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin: 0 0 1.5rem 0;
   font-size: 0.9rem;
   line-height: 1.4;
@@ -167,7 +167,7 @@
 }
 
 .workspaceAction {
-  color: #162456;
+  color: var(--color-primary);
   font-weight: 500;
   font-size: 0.9rem;
   position: relative;

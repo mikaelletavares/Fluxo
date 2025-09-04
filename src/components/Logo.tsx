@@ -18,7 +18,7 @@ export function Logo({ className = '', alt = 'Fluxo Logo', showText = true }: Lo
       />
       {showText && (
         <h1 className="brand-name" style={{ 
-          color: '#162456', 
+          color: 'var(--color-text-primary)', 
           fontSize: '2rem', 
           fontWeight: '700', 
           margin: 0 

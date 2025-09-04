@@ -3,7 +3,7 @@
   width: 100%;
   max-width: 100%;
   min-height: 100vh;
-  background-color: #f8fafc;
+  background-color: var(--color-background-secondary);
   box-sizing: border-box;
   overflow-x: hidden;
 }
@@ -35,7 +35,7 @@
 }
 
 .brandName {
-  color: #162456;
+  color: var(--color-primary);
   font-size: 2rem;
   font-weight: 700;
   margin: 0;
@@ -50,8 +50,8 @@
 .createButton {
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
-  color: #fff;
-  background-color: #162456;
+  color: var(--color-text-inverse);
+  background-color: var(--color-primary);
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -59,7 +59,7 @@
 }
 
 .createButton:hover {
-  background-color: #0f1a3a;
+  background-color: var(--color-primary-hover);
 }
 
 .userButton {
@@ -72,15 +72,15 @@
 }
 
 .userButton:hover {
-  background-color: #f0f0f0;
+  background-color: var(--color-background-tertiary);
 }
 
 .userAvatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #162456, #0f1a3a);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--color-text-inverse);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,9 +96,9 @@
 }
 
 .projectItem {
-  background-color: #ffffff;
+  background-color: var(--color-background);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-md);
   transition: transform 0.2s ease-in-out;
 }
 
@@ -110,15 +110,15 @@
   display: block;
   padding: 1.5rem;
   text-decoration: none;
-  color: #333;
+  color: var(--color-text-primary);
   font-weight: 500;
   font-size: 1.1rem;
 }
 
 .content {
-  background-color: #ffffff;
+  background-color: var(--color-background);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-md);
   padding: 2rem;
 }
 
@@ -130,13 +130,13 @@
 
 .welcomeSection h2 {
   font-size: 2rem;
-  color: #1f2937;
+  color: var(--color-text-primary);
   margin: 0 0 0.5rem 0;
   font-weight: 600;
 }
 
 .welcomeSection p {
-  color: #6b7280;
+  color: var(--color-text-secondary);
   font-size: 1.1rem;
   margin: 0;
   line-height: 1.5;
@@ -152,8 +152,8 @@
 }
 
 .workspaceCard {
-  background-color: #f8fafc;
-  border: 2px solid #e2e8f0;
+  background-color: var(--color-background);
+  border: 2px solid var(--color-border);
   border-radius: 12px;
   padding: 2rem;
   text-align: center;
@@ -203,7 +203,7 @@
 
 .workspaceCard h3 {
   font-size: 1.25rem;
-  color: #1f2937;
+  color: var(--color-text-primary);
   margin: 0 0 0.5rem 0;
   font-weight: 600;
   position: relative;
@@ -211,7 +211,7 @@
 }
 
 .workspaceCard p {
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin: 0 0 1.5rem 0;
   font-size: 0.9rem;
   line-height: 1.4;
@@ -220,7 +220,7 @@
 }
 
 .workspaceAction {
-  color: #162456;
+  color: var(--color-primary);
   font-weight: 500;
   font-size: 0.9rem;
   position: relative;
@@ -235,9 +235,9 @@
   justify-content: center;
   text-align: center;
   padding: 3rem 2rem;
-  color: #6b7280;
-  background-color: #f8fafc;
-  border: 2px dashed #d1d5db;
+  color: var(--color-text-secondary);
+  background-color: var(--color-background-secondary);
+  border: 2px dashed var(--color-border);
   border-radius: 12px;
 }
 
@@ -255,7 +255,7 @@
 
 .emptyWorkspaces h3 {
   font-size: 1.25rem;
-  color: #374151;
+  color: var(--color-text-primary);
   margin: 0 0 0.5rem 0;
   font-weight: 600;
 }

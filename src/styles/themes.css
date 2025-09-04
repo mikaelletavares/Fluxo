@@ -1,0 +1,174 @@
+/* Variáveis CSS para tema claro */
+:root {
+  /* Cores principais */
+  --color-primary: #162456;
+  --color-primary-hover: #0f1a3a;
+  --color-primary-light: #e0e7ff;
+  
+  /* Cores de fundo */
+  --color-background: #ffffff;
+  --color-background-secondary: #f8fafc;
+  --color-background-tertiary: #f3f4f6;
+  
+  /* Cores de texto */
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #6b7280;
+  --color-text-tertiary: #9ca3af;
+  --color-text-inverse: #ffffff;
+  
+  /* Cores de borda */
+  --color-border: #e5e7eb;
+  --color-border-light: #f3f4f6;
+  --color-border-dark: #d1d5db;
+  
+  /* Cores de status */
+  --color-success: #10b981;
+  --color-success-bg: #d1fae5;
+  --color-success-text: #065f46;
+  
+  --color-warning: #f59e0b;
+  --color-warning-bg: #fef3c7;
+  --color-warning-text: #92400e;
+  
+  --color-error: #ef4444;
+  --color-error-bg: #fef2f2;
+  --color-error-text: #991b1b;
+  
+  --color-info: #3b82f6;
+  --color-info-bg: #dbeafe;
+  --color-info-text: #1e40af;
+  
+  /* Sombras */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Gradientes */
+  --gradient-primary: linear-gradient(135deg, #162456, #0f1a3a);
+  --gradient-secondary: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+}
+
+/* Variáveis CSS para tema escuro */
+[data-theme="dark"] {
+  /* Cores principais */
+  --color-primary: #4f46e5;
+  --color-primary-hover: #3730a3;
+  --color-primary-light: #312e81;
+  
+  /* Cores de fundo */
+  --color-background: #0f172a;
+  --color-background-secondary: #1e293b;
+  --color-background-tertiary: #334155;
+  
+  /* Cores de texto */
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-tertiary: #94a3b8;
+  --color-text-inverse: #ffffff;
+  
+  /* Cores de borda */
+  --color-border: #334155;
+  --color-border-light: #475569;
+  --color-border-dark: #1e293b;
+  
+  /* Cores de status */
+  --color-success: #22c55e;
+  --color-success-bg: #14532d;
+  --color-success-text: #bbf7d0;
+  
+  --color-warning: #f59e0b;
+  --color-warning-bg: #451a03;
+  --color-warning-text: #fde68a;
+  
+  --color-error: #ef4444;
+  --color-error-bg: #450a0a;
+  --color-error-text: #fecaca;
+  
+  --color-info: #3b82f6;
+  --color-info-bg: #1e3a8a;
+  --color-info-text: #dbeafe;
+  
+  /* Sombras */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  
+  /* Gradientes */
+  --gradient-primary: linear-gradient(135deg, #4f46e5, #3730a3);
+  --gradient-secondary: linear-gradient(135deg, #1e293b, #334155);
+}
+
+/* Aplicar cores automaticamente */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Estilos para componentes que usam as variáveis */
+.theme-aware {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+.theme-aware-secondary {
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+.theme-aware-card {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+}
+
+.theme-aware-input {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+.theme-aware-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* Estilos específicos para campos de texto no modo escuro */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  color: #ffffff !important;
+  background-color: var(--color-background) !important;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+.theme-aware-button {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  border: 1px solid var(--color-primary);
+}
+
+.theme-aware-button:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.theme-aware-button-secondary {
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+.theme-aware-button-secondary:hover {
+  background-color: var(--color-background-tertiary);
+  border-color: var(--color-border-dark);
+}
